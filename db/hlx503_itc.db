@@ -1,0 +1,4 @@
+record(longout, "$(P)$(NAME)_ISOBUS") {
+    field(DESC, "ISOBUS address of $(NAME)")
+    field(VAL, "$(ISOBUS)")
+}

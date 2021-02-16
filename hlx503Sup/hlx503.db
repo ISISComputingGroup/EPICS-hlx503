@@ -16,23 +16,3 @@ record(bo, "$(P)DISABLE")
     field(ZNAM, "COMMS ENABLED")
     field(ONAM, "COMMS DISABLED")
 }
-
-record(longout, "$(P)HE3POT_HIGHT_ISOBUS") {
-    field(DESC, "ISOBUS address of HE3POT ITC at high t")
-    field(VAL, "$(HE3POT_HIGHT_ISOBUS)")
-}
-
-record(longout, "$(P)HE3POT_LOWT_ISOBUS") {
-    field(DESC, "ISOBUS address of HE3POT ITC at low t")
-    field(VAL, "$(HE3POT_LOWT_ISOBUS)")
-}
-
-record(longout, "$(P)1KPOT_ISOBUS") {
-    field(DESC, "ISOBUS address of 1K Pot ITC")
-    field(VAL, "$(1KPOT_ISOBUS)")
-}
-
-record(longout, "$(P)SORB_ISOBUS") {
-    field(DESC, "ISOBUS address of Sorb ITC")
-    field(VAL, "$(SORB_ISOBUS)")
-}
