@@ -1,0 +1,11 @@
+ReadTimeout = 1000;
+WriteTimeout = 1000;
+ReplyTimeout = 1000;
+
+
+Terminator = LF;
+
+get_temp {
+    out "@\$1R\$2";
+    in "\?%f";
+}

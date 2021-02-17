@@ -7,7 +7,7 @@ DB += hlx503.db
 DB += hlx503_itc.db
 
 #protocol files
-# DATA += hlx503.proto
+DATA += hlx503_itc.proto
 
 #=======================================
 include $(TOP)/configure/RULES

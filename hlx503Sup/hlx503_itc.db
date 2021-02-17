@@ -2,3 +2,21 @@ record(longout, "$(P)$(NAME)_ISOBUS") {
     field(DESC, "ISOBUS address of $(NAME)")
     field(VAL, "$(ISOBUS)")
 }
+
+record(ai, "$(P)$(NAME):TEMP") {
+    field(DESC, "Temp of $(NAME)")
+
+    field(SCAN, "1 second")
+    field(DTYP, "stream")
+    field(INP, "@hlx503_itc.proto get_temp($(ISOBUS),$(CHANNEL)) $(PORT)")
+
+    field(PREC, "4")
+    field(EGU, "K")
+    
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
+
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):TEMP")
+    field(SDIS, "$(P)DISABLE")
+}
