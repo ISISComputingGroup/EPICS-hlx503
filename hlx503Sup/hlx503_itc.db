@@ -6,7 +6,7 @@ record(longout, "$(P)$(NAME)_ISOBUS") {
 record(ai, "$(P)$(NAME):TEMP") {
     field(DESC, "Temp of $(NAME)")
 
-    field(SCAN, "1 second")
+    field(SCAN, "Passive")
     field(DTYP, "stream")
     field(INP, "@hlx503_itc.proto get_temp($(ISOBUS),$(CHANNEL)) $(PORT)")
 
@@ -18,5 +18,263 @@ record(ai, "$(P)$(NAME):TEMP") {
 
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:$(NAME):TEMP")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(longin, "$(P)$(NAME):STATUS") {
+    field(DESC, "Status of $(NAME)")
+
+    field(SCAN, "Passive")
+    field(DTYP, "stream")
+    field(INP, "@hlx503_itc.proto get_status($(P)$(NAME):,$(ISOBUS)) $(PORT)")
+
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
+  
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):STATUS")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(longin, "$(P)$(NAME):MODE") {
+    field(DESC, "Autoheat, auto and init needlevalve")
+
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+
+    field(FLNK, "$(P)$(NAME):MODE:_FAN PP")
+    
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):MODE")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(fanout, "$(P)$(NAME):MODE:_FAN") {
+    field(DESC, "Do processing of mode pvs")
+
+    field(SELM, "All")
+    field(LNK0, "$(P)$(NAME):AUTOHEAT:_CALC PP")
+    field(LNK1, "$(P)$(NAME):AUTONEEDLEVALVE:_CALC PP")
+    field(LNK2, "$(P)$(NAME):INITNEEDLEVALVE:_CALC PP")
+}
+
+record(bi, "$(P)$(NAME):AUTOHEAT") {
+    field(DESC, "Heater manual or auto")
+
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+
+    field(ZNAM, "Manual")
+    field(ONAM, "Auto")
+
+    info(INTEREST, "MEDIUM")
+    info(archive, "VAL")
+
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):AUTOHEAT")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(calcout, "$(P)$(NAME):AUTOHEAT:_CALC") {
+    field(DESC, "Calc whether autoheat is on")
+
+    field(SCAN, "Passive")
+    
+    field(INPA, "$(P)$(NAME):MODE")
+    field(CALC, "(A & 1) # 0")
+    field(OUT, "$(P)$(NAME):AUTOHEAT PP")
+}
+
+record(bi, "$(P)$(NAME):AUTONEEDLEVALVE") {
+    field(DESC, "Needle Valve manual or auto")
+
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+
+    field(ZNAM, "Manual")
+    field(ONAM, "Auto")
+
+    info(INTEREST, "MEDIUM")
+    info(archive, "VAL")
+
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):AUTONEEDLEVALVE")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(calcout, "$(P)$(NAME):AUTONEEDLEVALVE:_CALC") {
+    field(DESC, "Calc whether autoneedlevalve is on")
+
+    field(SCAN, "Passive")
+    
+    field(INPA, "$(P)$(NAME):MODE")
+    field(CALC, "(A & 2) # 0")
+    field(OUT, "$(P)$(NAME):AUTONEEDLEVALVE PP")
+}
+
+record(bi, "$(P)$(NAME):INITNEEDLEVALVE") {
+    field(DESC, "Needle Valve initialising")
+
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+
+    info(INTEREST, "MEDIUM")
+    info(archive, "VAL")
+
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):INITNEEDLEVALVE")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(calcout, "$(P)$(NAME):INITNEEDLEVALVE:_CALC") {
+    field(DESC, "Calc whether needle valve initialising")
+
+    field(SCAN, "Passive")
+    
+    field(INPA, "$(P)$(NAME):MODE")
+    field(CALC, "(A & 4) # 0")
+    field(OUT, "$(P)$(NAME):INITNEEDLEVALVE PP")
+}
+
+record(longin, "$(P)$(NAME):CTRLCHANNEL") {
+    field(DESC, "Control channel of $(NAME)")
+
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+
+    info(INTEREST, "MEDIUM")
+    info(archive, "VAL")
+  
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):CTRLCHANNEL")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(bi, "$(P)$(NAME):AUTOPID") {
+    field(DESC, "Automatic PID of $(NAME)")
+
+    field(SCAN, "Passive") # Set by STATUS query
+    field(DTYP, "Soft Channel")
+
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+
+    info(INTEREST, "MEDIUM")
+    info(archive, "VAL")
+
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):AUTOPID")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(longin, "$(P)$(NAME):CTRL") {
+    field(DESC, "Control status of $(NAME)")
+
+    field(DTYP, "Soft Channel")
+
+    field(FLNK, "$(P)$(NAME):CTRL:_FAN PP")
+
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):CTRL")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(fanout, "$(P)$(NAME):CTRL:_FAN") {
+    field(DESC, "Do processing of ctrl pvs")
+
+    field(SELM, "All")
+    field(LNK0, "$(P)$(NAME):REMOTE:_CALC PP")
+    field(LNK1, "$(P)$(NAME):LOCKED:_CALC PP")
+}
+
+record(bi, "$(P)$(NAME):REMOTE") {
+    field(DESC, "Is $(NAME) in remote mode")
+
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+
+    info(INTEREST, "MEDIUM")
+    info(archive, "VAL")
+
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):REMOTE")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(calcout, "$(P)$(NAME):REMOTE:_CALC") {
+    field(DESC, "Calc whether in remote")
+
+    field(SCAN, "Passive")
+    
+    field(INPA, "$(P)$(NAME):CTRL")
+    field(CALC, "A & 1")
+
+    field(OUT, "$(P)$(NAME):REMOTE PP")
+}
+
+record(bi, "$(P)$(NAME):LOCKED") {
+    field(DESC, "Is $(NAME) locked")
+
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+
+    info(INTEREST, "MEDIUM")
+    info(archive, "VAL")
+
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):LOCKED")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(calcout, "$(P)$(NAME):LOCKED:_CALC") {
+    field(DESC, "Calc whether locked")
+
+    field(SCAN, "Passive")
+    
+    field(INPA, "$(P)$(NAME):CTRL")
+    field(CALC, "A & 2 = 0")
+    field(OUT, "$(P)$(NAME):LOCKED PP")
+}
+
+record(bi, "$(P)$(NAME):SWEEPING") {
+    field(DESC, "Whether sweeping")
+
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+
+    info(INTEREST, "MEDIUM")
+    info(archive, "VAL")
+
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):SWEEPING")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(bi, "$(P)$(NAME):TUNING") {
+    field(DESC, "Whether tuning")
+
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+
+    info(INTEREST, "MEDIUM")
+    info(archive, "VAL")
+
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):TUNING")
     field(SDIS, "$(P)DISABLE")
 }

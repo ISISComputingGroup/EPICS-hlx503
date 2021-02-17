@@ -9,3 +9,8 @@ get_temp {
     out "@\$1R\$2";
     in "\?%f";
 }
+
+get_status {
+    out "@\$2X";
+    in "X%dA%(\$1MODE.VAL)dC%(\$1CTRL.VAL)dS%(\$1SWEEPING.VAL)d\?%(\$1CTRLCHANNEL.VAL)?d%(\$1AUTOPID.VAL)#{L0=0|L1=1|=0}%(\$1TUNING.VAL)#{N0=0|N1=1|=0}";
+}
