@@ -370,6 +370,61 @@ record(bi, "$(P)$(NAME):AUTOPID") {
     field(SDIS, "$(P)DISABLE")
 }
 
+record(bo, "$(P)$(NAME):AUTOPID:SP") {
+    field(DESC, "Automatic PID setpoint of $(NAME)")
+
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+
+    field(FLNK, "$(P)$(NAME):AUTOPID:SP:_CALC1")
+
+    info(INTEREST, "MEDIUM")
+    info(archive, "VAL")
+
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):AUTOPID:SP")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(calcout, "$(P)$(NAME):AUTOPID:SP:_CALC1") {
+    field(DESC, "Calc AutoPID setpoint of $(NAME)")
+
+    field(SCAN, "Passive")
+    field(INPA, "$(P)$(NAME):AUTOPID:SP")
+    field(INPB, "$(P)$(NAME)_VERSION")
+    field(CALC, "B # 502 ? (A + 1) : 0")
+    field(OUT, "$(P)$(NAME):AUTOPID:SP:_CALC2 PP")
+    field(OOPT, "When Non-zero")
+}
+
+record(calcout, "$(P)$(NAME):AUTOPID:SP:_CALC2") {
+    field(DESC, "Calc AutoPID setpoint of $(NAME)")
+
+    field(SCAN, "Passive")
+    field(INPA, "$(P)$(NAME):AUTOPID:SP:_CALC1")
+    field(CALC, "A - 1")
+    field(OUT, "$(P)$(NAME):AUTOPID:SP:_OUT PP")
+}
+
+record(bo, "$(P)$(NAME):AUTOPID:SP:_OUT") {
+    field(DESC, "Send AutoPID setpoint of $(NAME)")
+
+    field(SCAN, "Passive")
+    field(DTYP, "stream")
+
+    field(OUT, "@hlx503_itc.proto set_autopid($(ISOBUS)) $(PORT)")
+
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):AUTOPID:SP")
+    field(SDIS, "$(P)DISABLE")
+}
+
 record(stringin, "$(P)$(NAME):TUNING:_TEMP") {
     field(DESC, "Store TEMP string of TUNING")
 

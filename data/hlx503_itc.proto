@@ -19,3 +19,8 @@ set_mode {
     out "@\$1A%d";
     in "@\$1A"
 }
+
+set_autopid {
+    out "@\$1L%d";
+    in "@\$1L"
+}
