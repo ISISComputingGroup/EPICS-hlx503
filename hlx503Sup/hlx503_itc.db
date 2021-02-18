@@ -3,10 +3,12 @@ record(longout, "$(P)$(NAME)_ISOBUS") {
     field(VAL, "$(ISOBUS)")
 }
 
+# TEMP records
+
 record(ai, "$(P)$(NAME):TEMP") {
     field(DESC, "Temp of $(NAME)")
 
-    field(SCAN, "Passive")
+    field(SCAN, "1 second")
     field(DTYP, "stream")
     field(INP, "@hlx503_itc.proto get_temp($(ISOBUS),$(CHANNEL)) $(PORT)")
 
@@ -21,10 +23,12 @@ record(ai, "$(P)$(NAME):TEMP") {
     field(SDIS, "$(P)DISABLE")
 }
 
+# Records filled from get_status
+
 record(longin, "$(P)$(NAME):STATUS") {
     field(DESC, "Status of $(NAME)")
 
-    field(SCAN, "Passive")
+    field(SCAN, "1 second")
     field(DTYP, "stream")
     field(INP, "@hlx503_itc.proto get_status($(P)$(NAME):,$(ISOBUS)) $(PORT)")
 
@@ -139,37 +143,6 @@ record(calcout, "$(P)$(NAME):INITNEEDLEVALVE:_CALC") {
     field(OUT, "$(P)$(NAME):INITNEEDLEVALVE PP")
 }
 
-record(longin, "$(P)$(NAME):CTRLCHANNEL") {
-    field(DESC, "Control channel of $(NAME)")
-
-    field(SCAN, "Passive")
-    field(DTYP, "Soft Channel")
-
-    info(INTEREST, "MEDIUM")
-    info(archive, "VAL")
-  
-    field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:$(NAME):CTRLCHANNEL")
-    field(SDIS, "$(P)DISABLE")
-}
-
-record(bi, "$(P)$(NAME):AUTOPID") {
-    field(DESC, "Automatic PID of $(NAME)")
-
-    field(SCAN, "Passive") # Set by STATUS query
-    field(DTYP, "Soft Channel")
-
-    field(ZNAM, "OFF")
-    field(ONAM, "ON")
-
-    info(INTEREST, "MEDIUM")
-    info(archive, "VAL")
-
-    field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:$(NAME):AUTOPID")
-    field(SDIS, "$(P)DISABLE")
-}
-
 record(longin, "$(P)$(NAME):CTRL") {
     field(DESC, "Control status of $(NAME)")
 
@@ -241,7 +214,7 @@ record(calcout, "$(P)$(NAME):LOCKED:_CALC") {
     field(SCAN, "Passive")
     
     field(INPA, "$(P)$(NAME):CTRL")
-    field(CALC, "A & 2 = 0")
+    field(CALC, "(A & 2) = 0")
     field(OUT, "$(P)$(NAME):LOCKED PP")
 }
 
@@ -260,6 +233,94 @@ record(bi, "$(P)$(NAME):SWEEPING") {
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:$(NAME):SWEEPING")
     field(SDIS, "$(P)DISABLE")
+}
+
+record(stringin, "$(P)$(NAME):CTRLCHANNEL:_TEMP") {
+    field(DESC, "Store TEMP string of CTRLCHANNEL")
+
+    field(SCAN, "Passive")
+    field(DTYP,  "Soft Channel")
+
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):CTRLCHANNEL:_TEMP")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(scalcout, "$(P)$(NAME):CTRLCHANNEL:_CALC") {
+    field(DESC, "Calc CTRLCHANNEL from OPTIONALS")
+
+    field(INAA, "$(P)$(NAME):CTRLCHANNEL:_TEMP CP MS")
+    field(CALC, "AA # '' ? INT(AA-'H') : 0")
+    field(OUT, "$(P)$(NAME):CTRLCHANNEL PP")
+}
+
+record(longin, "$(P)$(NAME):CTRLCHANNEL") {
+    field(DESC, "Control channel of $(NAME)")
+
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+
+    info(INTEREST, "MEDIUM")
+    info(archive, "VAL")
+  
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):CTRLCHANNEL")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(stringin, "$(P)$(NAME):AUTOPID:_TEMP") {
+    field(DESC, "Store TEMP string of AUTOPID")
+
+    field(SCAN, "Passive")
+    field(DTYP,  "Soft Channel")
+
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):AUTOPID:_TEMP")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(scalcout, "$(P)$(NAME):AUTOPID:_CALC") {
+    field(DESC, "Calc AUTOPID from _TEMP")
+
+    field(INAA, "$(P)$(NAME):AUTOPID:_TEMP CP MS")
+    field(CALC, "AA = 'L1' ? 'ON' : 'OFF'")
+    field(OUT, "$(P)$(NAME):AUTOPID PP")
+}
+
+record(bi, "$(P)$(NAME):AUTOPID") {
+    field(DESC, "Automatic PID of $(NAME)")
+
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+
+    info(INTEREST, "MEDIUM")
+    info(archive, "VAL")
+
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):AUTOPID")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(stringin, "$(P)$(NAME):TUNING:_TEMP") {
+    field(DESC, "Store TEMP string of TUNING")
+
+    field(SCAN, "Passive")
+    field(DTYP,  "Soft Channel")
+
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):TUNING:_TEMP")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(scalcout, "$(P)$(NAME):TUNING:_CALC") {
+    field(DESC, "Calc TUNING from _TEMP")
+
+    field(INAA, "$(P)$(NAME):TUNING:_TEMP CP MS")
+    field(CALC, "AA = 'N1' ? 'YES' : 'NO'")
+    field(OUT, "$(P)$(NAME):TUNING PP")
 }
 
 record(bi, "$(P)$(NAME):TUNING") {
