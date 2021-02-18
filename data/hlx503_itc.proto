@@ -14,3 +14,8 @@ get_status {
     out "@\$2X";
     in "X%dA%(\$1MODE.VAL)dC%(\$1CTRL.VAL)dS%(\$1SWEEPING.VAL)d%(\$1CTRLCHANNEL:_TEMP.VAL)?/H\d*/%(\$1AUTOPID:_TEMP.VAL)?/L\d*/%(\$1TUNING:_TEMP.VAL)?/N\d*/";
 }
+
+set_mode {
+    out "@\$1A%d";
+    in "@\$1A"
+}

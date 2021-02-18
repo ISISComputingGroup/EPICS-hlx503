@@ -3,6 +3,11 @@ record(longout, "$(P)$(NAME)_ISOBUS") {
     field(VAL, "$(ISOBUS)")
 }
 
+record(longout, "$(P)$(NAME)_VERSION") {
+    field(DESC, "Version of $(NAME)")
+    field(VAL, "$(VERSION)")
+}
+
 # TEMP records
 
 record(ai, "$(P)$(NAME):TEMP") {
@@ -62,6 +67,29 @@ record(fanout, "$(P)$(NAME):MODE:_FAN") {
     field(LNK2, "$(P)$(NAME):INITNEEDLEVALVE:_CALC PP")
 }
 
+record(calcout, "$(P)$(NAME):MODE:SP:_CALC") {
+    field(DESC, "Calc set autoheat and autoneedlevalve")
+
+    field(INPA, "$(P)$(NAME):AUTOHEAT:SP")
+    field(INPB, "$(P)$(NAME):AUTONEEDLEVALVE:SP")
+    field(INPC, "$(P)$(NAME)_VERSION")
+    field(CALC, "A + (C # 601 && B == 1 ? 2 : 0)")
+    field(OUT, "$(P)$(NAME):MODE:SP PP")
+}
+
+record(longout, "$(P)$(NAME):MODE:SP") {
+    field(DESC, "Set autoheat and autoneedlevalve")
+
+    field(SCAN, "Passive")
+    field(DTYP, "stream")
+
+    field(OUT, "@hlx503_itc.proto set_mode($(ISOBUS)) $(PORT)")
+
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):MODE:SP")
+    field(SDIS, "$(P)DISABLE")
+}
+
 record(bi, "$(P)$(NAME):AUTOHEAT") {
     field(DESC, "Heater manual or auto")
 
@@ -89,6 +117,25 @@ record(calcout, "$(P)$(NAME):AUTOHEAT:_CALC") {
     field(OUT, "$(P)$(NAME):AUTOHEAT PP")
 }
 
+record(bo, "$(P)$(NAME):AUTOHEAT:SP") {
+    field(DESC, "Set heater to manual or auto")
+
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+
+    field(ZNAM, "Manual")
+    field(ONAM, "Auto")
+
+    field(FLNK, "$(P)$(NAME):MODE:SP:_CALC PP")
+
+    info(INTEREST, "MEDIUM")
+    info(archive, "VAL")
+
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):AUTOHEAT:SP")
+    field(SDIS, "$(P)DISABLE")
+}
+
 record(bi, "$(P)$(NAME):AUTONEEDLEVALVE") {
     field(DESC, "Needle Valve manual or auto")
 
@@ -114,6 +161,25 @@ record(calcout, "$(P)$(NAME):AUTONEEDLEVALVE:_CALC") {
     field(INPA, "$(P)$(NAME):MODE")
     field(CALC, "(A & 2) # 0")
     field(OUT, "$(P)$(NAME):AUTONEEDLEVALVE PP")
+}
+
+record(bo, "$(P)$(NAME):AUTONEEDLEVALVE:SP") {
+    field(DESC, "Set needle Valve manual or auto")
+
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+
+    field(ZNAM, "Manual")
+    field(ONAM, "Auto")
+
+    field(FLNK, "$(P)$(NAME):MODE:SP:_CALC PP")
+
+    info(INTEREST, "MEDIUM")
+    info(archive, "VAL")
+
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):AUTONEEDLEVALVE:SP")
+    field(SDIS, "$(P)DISABLE")
 }
 
 record(bi, "$(P)$(NAME):INITNEEDLEVALVE") {
