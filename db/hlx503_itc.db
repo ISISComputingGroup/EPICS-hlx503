@@ -229,6 +229,28 @@ record(fanout, "$(P)$(NAME):CTRL:_FAN") {
     field(LNK1, "$(P)$(NAME):LOCKED:_CALC PP")
 }
 
+record(longout, "$(P)$(NAME):CTRL:SP") {
+    field(DESC, "Set control status of $(NAME)")
+
+    field(SCAN, "Passive")
+    field(DTYP, "stream")
+
+    field(OUT, "@hlx503_itc.proto set_ctrl($(ISOBUS)) $(PORT)")
+
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):CTRL:SP")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(calcout, "$(P)$(NAME):CTRL:SP:_CALC") {
+    field(DESC, "Calc set remote and locked")
+
+    field(INPA, "$(P)$(NAME):REMOTE:SP")
+    #field(INPB, "$(P)$(NAME):LOCKED:SP")
+    field(CALC, "A")
+    field(OUT, "$(P)$(NAME):CTRL:SP PP")
+}
+
 record(bi, "$(P)$(NAME):REMOTE") {
     field(DESC, "Is $(NAME) in remote mode")
 
@@ -255,6 +277,25 @@ record(calcout, "$(P)$(NAME):REMOTE:_CALC") {
     field(CALC, "A & 1")
 
     field(OUT, "$(P)$(NAME):REMOTE PP")
+}
+
+record(bo, "$(P)$(NAME):REMOTE:SP") {
+    field(DESC, "Set $(NAME) remote mode")
+
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+
+    field(FLNK, "$(P)$(NAME):CTRL:SP:_CALC PP")
+
+    info(INTEREST, "MEDIUM")
+    info(archive, "VAL")
+
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):REMOTE:SP")
+    field(SDIS, "$(P)DISABLE")
 }
 
 record(bi, "$(P)$(NAME):LOCKED") {

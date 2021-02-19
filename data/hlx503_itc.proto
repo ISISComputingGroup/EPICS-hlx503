@@ -24,3 +24,8 @@ set_autopid {
     out "@\$1L%d";
     in "@\$1L"
 }
+
+set_ctrl {
+    out "@\$1C%d";
+    in "@\$1C"
+}
