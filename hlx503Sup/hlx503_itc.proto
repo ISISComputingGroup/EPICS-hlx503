@@ -44,3 +44,18 @@ set_ctrlchannel {
     out "@\$1H%d";
     in "@\$1H"
 }
+
+set_proportional {
+    out "@\$1P%f";
+    in "@\$1P"
+}
+
+set_integral {
+    out "@\$1I%.1f";
+    in "@\$1I"
+}
+
+set_derivative {
+    out "@\$1D%f";
+    in "@\$1D"
+}

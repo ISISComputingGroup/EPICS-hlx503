@@ -530,3 +530,62 @@ record(bi, "$(P)$(NAME):TUNING") {
     field(SIOL, "$(P)SIM:$(NAME):TUNING")
     field(SDIS, "$(P)DISABLE")
 }
+
+# PID Settings
+
+record(ao, "$(P)$(NAME):P:SP") {
+    field(DESC, "Proportional for $(NAME)")
+
+    field(SCAN, "Passive")
+    field(DTYP, "stream")
+
+    field(OUT, "@hlx503_itc.proto set_proportional($(ISOBUS)) $(PORT)")
+
+    field(PREC, "4")
+    field(EGU, "% of span")
+
+    info(INTEREST, "MEDIUM")
+    info(archive, "VAL")
+
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):P:SP")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(ao, "$(P)$(NAME):I:SP") {
+    field(DESC, "Integral for $(NAME)")
+
+    field(SCAN, "Passive")
+    field(DTYP, "stream")
+
+    field(OUT, "@hlx503_itc.proto set_integral($(ISOBUS)) $(PORT)")
+
+    field(PREC, "1")
+    field(EGU, "min")
+
+    info(INTEREST, "MEDIUM")
+    info(archive, "VAL")
+
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):I:SP")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(ao, "$(P)$(NAME):D:SP") {
+    field(DESC, "Derivative for $(NAME)")
+
+    field(SCAN, "Passive")
+    field(DTYP, "stream")
+
+    field(OUT, "@hlx503_itc.proto set_derivative($(ISOBUS)) $(PORT)")
+
+    field(PREC, "4")
+    field(EGU, "min")
+
+    info(INTEREST, "MEDIUM")
+    info(archive, "VAL")
+
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):D:SP")
+    field(SDIS, "$(P)DISABLE")
+}
