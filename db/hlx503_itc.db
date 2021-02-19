@@ -3,11 +3,6 @@ record(longout, "$(P)$(NAME)_ISOBUS") {
     field(VAL, "$(ISOBUS)")
 }
 
-record(longout, "$(P)$(NAME)_VERSION") {
-    field(DESC, "Version of $(NAME)")
-    field(VAL, "$(VERSION)")
-}
-
 # TEMP records
 
 record(ai, "$(P)$(NAME):TEMP") {
@@ -108,8 +103,7 @@ record(calcout, "$(P)$(NAME):MODE:SP:_CALC") {
 
     field(INPA, "$(P)$(NAME):AUTOHEAT:SP")
     field(INPB, "$(P)$(NAME):AUTONEEDLEVALVE:SP")
-    field(INPC, "$(P)$(NAME)_VERSION")
-    field(CALC, "A + (C # 601 && B == 1 ? 2 : 0)")
+    field(CALC, "A + (B * 2)")
     field(OUT, "$(P)$(NAME):MODE:SP PP")
 }
 
@@ -486,51 +480,15 @@ record(bo, "$(P)$(NAME):AUTOPID:SP") {
     field(DESC, "Automatic PID setpoint of $(NAME)")
 
     field(SCAN, "Passive")
-    field(DTYP, "Soft Channel")
-
-    field(ZNAM, "OFF")
-    field(ONAM, "ON")
-
-    field(FLNK, "$(P)$(NAME):AUTOPID:SP:_CALC1")
-
-    info(INTEREST, "MEDIUM")
-    info(archive, "VAL")
-
-    field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:$(NAME):AUTOPID:SP")
-    field(SDIS, "$(P)DISABLE")
-}
-
-record(calcout, "$(P)$(NAME):AUTOPID:SP:_CALC1") {
-    field(DESC, "Calc AutoPID setpoint of $(NAME)")
-
-    field(SCAN, "Passive")
-    field(INPA, "$(P)$(NAME):AUTOPID:SP")
-    field(INPB, "$(P)$(NAME)_VERSION")
-    field(CALC, "B # 502 ? (A + 1) : 0")
-    field(OUT, "$(P)$(NAME):AUTOPID:SP:_CALC2 PP")
-    field(OOPT, "When Non-zero")
-}
-
-record(calcout, "$(P)$(NAME):AUTOPID:SP:_CALC2") {
-    field(DESC, "Calc AutoPID setpoint of $(NAME)")
-
-    field(SCAN, "Passive")
-    field(INPA, "$(P)$(NAME):AUTOPID:SP:_CALC1")
-    field(CALC, "A - 1")
-    field(OUT, "$(P)$(NAME):AUTOPID:SP:_OUT PP")
-}
-
-record(bo, "$(P)$(NAME):AUTOPID:SP:_OUT") {
-    field(DESC, "Send AutoPID setpoint of $(NAME)")
-
-    field(SCAN, "Passive")
     field(DTYP, "stream")
 
     field(OUT, "@hlx503_itc.proto set_autopid($(ISOBUS)) $(PORT)")
 
     field(ZNAM, "OFF")
     field(ONAM, "ON")
+
+    info(INTEREST, "MEDIUM")
+    info(archive, "VAL")
 
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:$(NAME):AUTOPID:SP")
