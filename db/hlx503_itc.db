@@ -28,6 +28,42 @@ record(ai, "$(P)$(NAME):TEMP") {
     field(SDIS, "$(P)DISABLE")
 }
 
+record(ao, "$(P)$(NAME):TEMP:SP") {
+    field(DESC, "Set temp of $(NAME)")
+
+    field(SCAN, "Passive")
+    field(DTYP, "stream")
+    field(OUT, "@hlx503_itc.proto set_temp($(ISOBUS)) $(PORT)")
+
+    field(PREC, "4")
+    field(EGU, "K")
+    
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
+
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):TEMP:SP")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(ai, "$(P)$(NAME):TEMP:SP:RBV") {
+    field(DESC, "Temp set readback of $(NAME)")
+
+    field(SCAN, "1 second")
+    field(DTYP, "stream")
+    field(INP, "@hlx503_itc.proto get_temp_sp_rbv($(ISOBUS)) $(PORT)")
+
+    field(PREC, "4")
+    field(EGU, "K")
+    
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
+
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):TEMP:SP:RBV")
+    field(SDIS, "$(P)DISABLE")
+}
+
 # Records filled from get_status
 
 record(longin, "$(P)$(NAME):STATUS") {

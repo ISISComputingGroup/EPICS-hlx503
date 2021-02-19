@@ -7,7 +7,17 @@ Terminator = LF;
 
 get_temp {
     out "@\$1R\$2";
-    in "\?%f";
+    in "@\$1R%f";
+}
+
+get_temp_sp_rbv {
+    out "@\$1R0";
+    in "@\$1R%f";
+}
+
+set_temp {
+    out "@\$1T%f";
+    in "@\$1T";
 }
 
 get_status {
