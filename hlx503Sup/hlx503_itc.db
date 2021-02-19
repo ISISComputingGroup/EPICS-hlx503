@@ -246,8 +246,8 @@ record(calcout, "$(P)$(NAME):CTRL:SP:_CALC") {
     field(DESC, "Calc set remote and locked")
 
     field(INPA, "$(P)$(NAME):REMOTE:SP")
-    #field(INPB, "$(P)$(NAME):LOCKED:SP")
-    field(CALC, "A")
+    field(INPB, "$(P)$(NAME):LOCKED:SP")
+    field(CALC, "A + (B * 2)")
     field(OUT, "$(P)$(NAME):CTRL:SP PP")
 }
 
@@ -323,6 +323,25 @@ record(calcout, "$(P)$(NAME):LOCKED:_CALC") {
     field(INPA, "$(P)$(NAME):CTRL")
     field(CALC, "(A & 2) = 0")
     field(OUT, "$(P)$(NAME):LOCKED PP")
+}
+
+record(bi, "$(P)$(NAME):LOCKED:SP") {
+    field(DESC, "Set whether $(NAME) locked")
+
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+
+    field(FLNK, "$(P)$(NAME):CTRL:SP:_CALC PP")
+
+    info(INTEREST, "MEDIUM")
+    info(archive, "VAL")
+
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):LOCKED:SP")
+    field(SDIS, "$(P)DISABLE")
 }
 
 record(bi, "$(P)$(NAME):SWEEPING") {
