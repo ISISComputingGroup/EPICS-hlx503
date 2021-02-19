@@ -430,6 +430,22 @@ record(longin, "$(P)$(NAME):CTRLCHANNEL") {
     field(SDIS, "$(P)DISABLE")
 }
 
+record(longout, "$(P)$(NAME):CTRLCHANNEL:SP") {
+    field(DESC, "Set control channel of $(NAME)")
+
+    field(SCAN, "Passive")
+    field(DTYP, "stream")
+
+    field(OUT, "@hlx503_itc.proto set_ctrlchannel($(ISOBUS)) $(PORT)")
+
+    info(INTEREST, "MEDIUM")
+    info(archive, "VAL")
+  
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):CTRLCHANNEL:SP")
+    field(SDIS, "$(P)DISABLE")
+}
+
 record(stringin, "$(P)$(NAME):AUTOPID:_TEMP") {
     field(DESC, "Store TEMP string of AUTOPID")
 

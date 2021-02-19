@@ -39,3 +39,8 @@ set_ctrl {
     out "@\$1C%d";
     in "@\$1C"
 }
+
+set_ctrlchannel {
+    out "@\$1H%d";
+    in "@\$1H"
+}
