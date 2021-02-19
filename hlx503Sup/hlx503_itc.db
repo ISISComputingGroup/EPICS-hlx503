@@ -589,3 +589,41 @@ record(ao, "$(P)$(NAME):D:SP") {
     field(SIOL, "$(P)SIM:$(NAME):D:SP")
     field(SDIS, "$(P)DISABLE")
 }
+
+# Heater Output
+
+record(ai, "$(P)$(NAME):HEATER_OUTPUT") {
+    field(DESC, "Heater output of $(NAME)")
+
+    field(SCAN, "1 second")
+    field(DTYP, "stream")
+    field(INP, "@hlx503_itc.proto get_heater_output($(ISOBUS)) $(PORT)")
+
+    field(PREC, "4")
+    field(EGU, "%")
+    
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
+
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):HEATER_OUTPUT")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(ao, "$(P)$(NAME):HEATER_OUTPUT:SP") {
+    field(DESC, "Set heater output of $(NAME)")
+
+    field(SCAN, "Passive")
+    field(DTYP, "stream")
+    field(OUT, "@hlx503_itc.proto set_heater_output($(ISOBUS)) $(PORT)")
+
+    field(PREC, "4")
+    field(EGU, "%")
+    
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
+
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:$(NAME):HEATER_OUTPUT:SP")
+    field(SDIS, "$(P)DISABLE")
+}

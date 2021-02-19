@@ -59,3 +59,13 @@ set_derivative {
     out "@\$1D%f";
     in "@\$1D"
 }
+
+set_heater_output {
+    out "@\$1O%f";
+    in "@\$1O"
+}
+
+get_heater_output {
+    out "@\$1R5";
+    in "@\$1R%f"
+}
