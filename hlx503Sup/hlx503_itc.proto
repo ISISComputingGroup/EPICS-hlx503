@@ -84,3 +84,13 @@ get_heater_output {
     out "@\$1R5";
     in "@\$1R%f"
 }
+
+set_needle_valve_percent {
+    out "@\$1G%.1f";
+    in "@\$1G"
+}
+
+get_needle_valve_percent {
+    out "@\$1R7";
+    in "@\$1R%f"
+}
