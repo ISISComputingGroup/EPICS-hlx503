@@ -16,3 +16,63 @@ record(bo, "$(P)DISABLE")
     field(ZNAM, "COMMS ENABLED")
     field(ONAM, "COMMS DISABLED")
 }
+
+## Temperature for the He3 Pot
+
+record(calc, "$(P)TEMP:HE3POT") {
+    field(DESC, "Temp of the He3 Pot")
+    field(SCAN, ".2 second")
+
+    field(INPA, "$(P)TEMP:HE3POTHI")
+    field(INPB, "$(P)TEMP:1KPOTHE3POTLO")
+    field(INPC, "$(P)TEMP:HE3POT:SP")
+    field(CALC, "C > $(MAX_TEMP_FOR_HE3_COOLING) ? A : B")
+}
+
+record(ao, "$(P)TEMP:HE3POT:SP") {
+    field(DESC, "Temp sp of the He3 Pot")
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+
+    field(DRVH, "$(MAX_OPERATING_TEMP_FOR_HELIOX)")
+    field(DRVL, "-1.0")
+
+    field(FLNK, "$(P)TEMP:HE3POT:_CTRLCHANNEL PP")
+}
+
+record(scalcout, "$(P)TEMP:HE3POT:_CTRLCHANNEL") {
+    field(DESC, "Channel to use for He3 Pot")
+    field(SCAN, "Passive")
+
+    field(INPC, "$(P)TEMP:HE3POT:SP")
+    field(CALC, "C > $(MAX_TEMP_FOR_HE3_COOLING) ? 'HE3POTHI' : '1KPOTHE3POTLO'")
+    field(OUT, "$(P)CTRLCHANNEL:SP PP")
+
+    field(FLNK, "$(P)TEMP:HE3POT:SP:_WRITE PP")
+}
+
+record(calcout, "$(P)TEMP:HE3POT:SP:_WRITE") {
+    field(DESC, "Write temp sp of the He3 Pot")
+    field(SCAN, "Passive")
+
+    field(INPA, "$(P)TEMP:HE3POT:SP")
+    field(CALC, "A")
+    field(OUT, "$(P)TEMP:SP PP")
+}
+
+## Turn heater off
+
+record(seq, "$(P)HEATER:HE3POT:OFF") {
+    field(DESC, "Turn the heater off")
+
+    field(DOL0, "$(P)HE3POT:CHAN CP")
+    field(LNK0, "$(P)CTRLCHANNEL:SP.RVAL PP")
+
+    field(DOL1, "Manual")
+    field(LNK1, "$(P)MODE:HTR:SP")
+    field(DLY1, "0.25")
+
+    field(DOL2, "0.0")
+    field(LNK2, "$(P)HEATERP:SP")
+    field(DLY2, "0.25")
+}
