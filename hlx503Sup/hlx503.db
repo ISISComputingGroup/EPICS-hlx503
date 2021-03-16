@@ -85,17 +85,14 @@ record(calcout, "$(P)TEMP:HE3POT:SP:_WRITE") {
 
 ## Turn heater off
 
-record(seq, "$(P)HEATER:HE3POT:OFF") {
+record(seq, "$(P)HEATER:OFF") {
     field(DESC, "Turn the heater off")
 
-    field(DOL0, "1")
-    field(LNK0, "$(P)TEMP:HE3POT:_CTRLCHANNEL.PROC")
+    field(DO0, "Manual")
+    field(LNK0, "$(P)MODE:HTR:SP PP")
 
-    field(DOL1, "Manual")
-    field(LNK1, "$(P)MODE:HTR:SP")
-    field(DLY1, "0.25")
+    field(DO1, "0.0")
+    field(LNK1, "$(P)HEATERP:SP PP")
 
-    field(DOL2, "0.0")
-    field(LNK2, "$(P)HEATERP:SP")
-    field(DLY2, "0.25")
+    field(STAT, "NO_ALARM")
 }
