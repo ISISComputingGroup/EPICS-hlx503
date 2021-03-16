@@ -35,9 +35,34 @@ record(ao, "$(P)TEMP:HE3POT:SP") {
     field(DTYP, "Soft Channel")
 
     field(DRVH, "$(MAX_OPERATING_TEMP_FOR_HELIOX)")
-    field(DRVL, "-1.0")
+    field(HIGH, "$(MAX_OPERATING_TEMP_FOR_HELIOX)")
+    field(HSV, "INVALID")
 
-    field(FLNK, "$(P)TEMP:HE3POT:_CTRLCHANNEL PP")
+    field(DRVL, "-1.0")
+    field(LOW, "-1.0")
+}
+
+record(calcout, "$(P)TEMP:HE3POT:SP:_CALC") {
+    field(DESC, "Calc whether to send setpoint")
+    field(SCAN, "Passive")
+    
+    field(INPA, "$(P)TEMP:HE3POT:SP CP MS")
+    field(CALC, "A")
+
+    field(IVOA, "Don't drive outputs")
+    field(OUT, "$(P)TEMP:HE3POT:SP:_SEQ PP")
+}
+
+record(seq, "$(P)TEMP:HE3POT:SP:_SEQ") {
+
+    field(DESC, "Sequence setpoint actions")
+
+    field(DOL0, "1")
+    field(LNK0, "$(P)TEMP:HE3POT:_CTRLCHANNEL PP")
+
+    field(DOL1, "1")
+    field(LNK1, "$(P)TEMP:HE3POT:SP:_WRITE PP")
+    field(DLY1, "0.1")
 }
 
 record(scalcout, "$(P)TEMP:HE3POT:_CTRLCHANNEL") {
@@ -47,8 +72,6 @@ record(scalcout, "$(P)TEMP:HE3POT:_CTRLCHANNEL") {
     field(INPC, "$(P)TEMP:HE3POT:SP")
     field(CALC, "C > $(MAX_TEMP_FOR_HE3_COOLING) ? 'HE3POTHI' : '1KPOTHE3POTLO'")
     field(OUT, "$(P)CTRLCHANNEL:SP PP")
-
-    field(FLNK, "$(P)TEMP:HE3POT:SP:_WRITE PP")
 }
 
 record(calcout, "$(P)TEMP:HE3POT:SP:_WRITE") {
@@ -65,8 +88,8 @@ record(calcout, "$(P)TEMP:HE3POT:SP:_WRITE") {
 record(seq, "$(P)HEATER:HE3POT:OFF") {
     field(DESC, "Turn the heater off")
 
-    field(DOL0, "$(P)HE3POT:CHAN CP")
-    field(LNK0, "$(P)CTRLCHANNEL:SP.RVAL PP")
+    field(DOL0, "1")
+    field(LNK0, "$(P)TEMP:HE3POT:_CTRLCHANNEL.PROC")
 
     field(DOL1, "Manual")
     field(LNK1, "$(P)MODE:HTR:SP")
