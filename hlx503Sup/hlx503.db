@@ -90,18 +90,10 @@ record(ao, "$(P)TEMP:SORB:SP") {
     field(SCAN, "Passive")
     field(DTYP, "Soft Channel")
 
-    field(DRVH, "$(MAX_OPERATING_TEMP_FOR_HELIOX)")
-    field(HIGH, "$(MAX_OPERATING_TEMP_FOR_HELIOX)")
-    field(HSV, "INVALID")
-
-    field(DRVL, "-1.0")
-    field(LOW, "-1.0")
-
-    field(FLNK, "$(P)TEMP:HE3POT:SP:_SEQ PP")
+    field(FLNK, "$(P)TEMP:SORB:SP:_SEQ PP")
 }
 
 record(seq, "$(P)TEMP:SORB:SP:_SEQ") {
-
     field(DESC, "Sequence setpoint actions")
 
     field(DOL0, "$(SORB_CHANNEL)")
