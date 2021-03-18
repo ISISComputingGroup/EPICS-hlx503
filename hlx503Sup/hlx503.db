@@ -83,16 +83,162 @@ record(calcout, "$(P)TEMP:HE3POT:SP:_WRITE") {
     field(OUT, "$(P)TEMP:SP PP")
 }
 
+## Temperature for the SORB
+
+record(ao, "$(P)TEMP:SORB:SP") {
+    field(DESC, "Temp sp for the SORB")
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+
+    field(DRVH, "$(MAX_OPERATING_TEMP_FOR_HELIOX)")
+    field(HIGH, "$(MAX_OPERATING_TEMP_FOR_HELIOX)")
+    field(HSV, "INVALID")
+
+    field(DRVL, "-1.0")
+    field(LOW, "-1.0")
+
+    field(FLNK, "$(P)TEMP:HE3POT:SP:_SEQ PP")
+}
+
+record(seq, "$(P)TEMP:SORB:SP:_SEQ") {
+
+    field(DESC, "Sequence setpoint actions")
+
+    field(DOL0, "$(SORB_CHANNEL)")
+    field(LNK0, "$(P)CTRLCHANNEL:SP PP")
+
+    field(DOL1, "$(P)TEMP:SORB:SP")
+    field(LNK1, "$(P)TEMP:SP PP")
+    field(DLY1, "0.1")
+}
+
 ## Turn heater off
 
-record(seq, "$(P)HEATER:OFF") {
+record(sseq, "$(P)HEATER:OFF") {
     field(DESC, "Turn the heater off")
 
-    field(DO0, "Manual")
-    field(LNK0, "$(P)MODE:HTR:SP PP")
+    field(STR1, "Manual")
+    field(LNK1, "$(P)MODE:HTR:SP PP")
 
-    field(DO1, "0.0")
-    field(LNK1, "$(P)HEATERP:SP PP")
+    field(DO2, "0.0")
+    field(LNK2, "$(P)HEATERP:SP PP")
 
     field(STAT, "NO_ALARM")
 }
+
+## Setting PIDs from file
+
+record(waveform, "$(P)DIRBASE:SP")
+{
+   field(DTYP, "asynOctetWrite")
+   field(INP, "@asyn($(FILELIST),0,1)DIRBASE")
+   field(PINI, "NO")
+   field(FTVL, "CHAR")
+   field(NELM, 256)
+}
+
+record(waveform, "$(P)DIRBASE")
+{
+   field(DTYP, "asynOctetRead")
+   field(INP, "@asyn($(FILELIST),0,1)DIRBASE")
+   field(PINI, "YES")
+   field(FTVL, "CHAR")
+   field(NELM, 256)
+   field(SCAN, "I/O Intr")
+}
+
+record(waveform, "$(P)PID_FILES")
+{
+    field(DESC, "Compressed JSON list of calib files")
+    field(FTVL, "CHAR")
+    field(DTYP, "asynOctetRead")
+    field(INP, "@asyn($(FILELIST),0,1)JARR")
+    field(NELM, 16384)
+    field(SCAN, "I/O Intr")
+}
+
+record(bo, "$(P)LUTON:SP")
+{
+   field(DESC, "Toggles the PID lookup")
+   field(DTYP, "asynInt32")
+   field(OUT,  "@asyn($(READ),0,1)LUT")
+   field(ZNAM, "NO")
+   field(ONAM, "YES")
+}
+
+record(bi, "$(P)LUTON")
+{
+   field(DESC, "PID lookup readback")
+   field(DTYP, "asynInt32")
+   field(INP,  "@asyn($(READ),0,1)LUT")
+   field(ZNAM, "NO")
+   field(ONAM, "YES")
+   field(SCAN, "I/O Intr")
+}
+
+record(stringin, "$(P)_PID_FILE")
+{
+   field(DTYP, "asynOctetRead")
+   field(INP,  "@asyn($(READ),0,1)DIR")
+   field(SCAN, "I/O Intr")
+}
+
+record(stringout, "$(P)_PID_FILE:SP")
+{
+   field(DTYP, "asynOctetWrite")
+   field(OUT,  "@asyn($(READ),0,1)DIR")
+}
+
+record(scalcout, "$(P)_PUSH_PID_FILE:SP")
+{
+    field(INAA, "$(P)HE3POT:PID_FILE CP")
+    field(INBB, "$(P)SORB:PID_FILE CP")
+    field(INPA, "$(P)CTRLCHANNEL:SP CP")
+    field(CALC, "A = $(SORB_CHANNEL) ? BB : AA")
+    field(OUT, "$(P)_PID_FILE:SP PP")
+}
+
+record(stringin, "$(P)HE3POT:PID_FILE")
+{
+    field(VAL, "Default.txt")
+}
+
+record(stringout, "$(P)HE3POT:PID_FILE:SP")
+{
+   field(OUT, "$(P)HE3POT:PID_FILE PP")
+}
+
+record(stringin, "$(P)SORB:PID_FILE")
+{
+    field(VAL, "Default.txt")
+}
+
+record(stringout, "$(P)SORB:PID_FILE:SP")
+{
+      field(OUT, "$(P)SORB:PID_FILE PP")
+}
+
+record(ai, "$(P)OUT_P")
+{
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(READ),0,1)P")
+    field(PREC, "5")
+    field(SCAN, "I/O Intr")
+}
+
+record(ai, "$(P)OUT_I")
+{
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(READ),0,1)I")
+    field(PREC, "5")
+    field(SCAN, "I/O Intr")
+}
+
+record(ai, "$(P)OUT_D")
+{
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(READ),0,1)D")
+    field(PREC, "5")
+    field(SCAN, "I/O Intr")
+}
+
