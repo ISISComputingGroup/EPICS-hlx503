@@ -201,27 +201,57 @@ record(stringout, "$(P)SORB:PID_FILE:SP")
       field(OUT, "$(P)SORB:PID_FILE PP")
 }
 
-record(ai, "$(P)OUT_P")
+record(ai, "$(P)_P")
 {
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(READ),0,1)P")
     field(PREC, "5")
     field(SCAN, "I/O Intr")
+    field(FLNK, "$(P)_P:SP PP")
 }
 
-record(ai, "$(P)OUT_I")
+record(ao, "$(P)_P:SP")
+{
+    field(DTYP, "Soft Channel")
+    field(DOL, "$(P)_P")
+    field(OMSL, "closed_loop")
+    field(OIF, "Full")
+    field(OUT, "$(P)P:SP PP")
+}
+
+record(ai, "$(P)_I")
 {
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(READ),0,1)I")
     field(PREC, "5")
     field(SCAN, "I/O Intr")
+    field(FLNK, "$(P)_I:SP PP")
 }
 
-record(ai, "$(P)OUT_D")
+record(ao, "$(P)_I:SP")
+{
+    field(DTYP, "Soft Channel")
+    field(DOL, "$(P)_I")
+    field(OMSL, "closed_loop")
+    field(OIF, "Full")
+    field(OUT, "$(P)I:SP PP")
+}
+
+record(ai, "$(P)_D")
 {
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(READ),0,1)D")
     field(PREC, "5")
     field(SCAN, "I/O Intr")
+    field(FLNK, "$(P)_D:SP PP")
+}
+
+record(ao, "$(P)_D:SP")
+{
+    field(DTYP, "Soft Channel")
+    field(DOL, "$(P)_D")
+    field(OMSL, "closed_loop")
+    field(OIF, "Full")
+    field(OUT, "$(P)D:SP PP")
 }
 
