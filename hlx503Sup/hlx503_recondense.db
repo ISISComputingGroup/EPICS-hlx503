@@ -135,3 +135,17 @@ record(ai, "$(P)RECONDENSE:TEMP:SP:RBV") {
 
     field(UDFS, "NO_ALARM")
 }
+
+record(ao, "$(P)RECONDENSE:TEMP:_FORWARD") {
+    field(DESC, "Forward condense temp set to device")
+    field(SCAN, "Passive")
+
+    field(PREC, "4")
+    field(EGU, "K")
+    
+    field(DOL, "$(P)RECONDENSE:TEMP:SP:RBV")
+    field(OUT, "$(P)TEMP:HE3POT:SP PP")
+    field(OMSL, "closed_loop")
+
+    field(UDFS, "NO_ALARM")
+}
