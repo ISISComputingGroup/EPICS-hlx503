@@ -79,3 +79,59 @@ record(bo, "$(P)RECONDENSE:TIMED_OUT:SP") {
 
     field(UDFS, "NO_ALARM")
 }
+
+record(bi, "$(P)RECONDENSE:SKIPPED") {
+    field(DESC, "Has the recondense part been skipped")
+
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+}
+
+record(bo, "$(P)RECONDENSE:SKIPPED:SP") {
+    field(DESC, "Set if the recondense part was skipped")
+
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+
+    field(OUT, "$(P)RECONDENSE:SKIPPED PP")
+
+    field(UDFS, "NO_ALARM")
+}
+
+## Temperature to set after the recondense is complete
+
+record(ao, "$(P)RECONDENSE:TEMP:SP") {
+    field(DESC, "Temp setpoint to set after recondense")
+    field(SCAN, "Passive")
+
+    field(HIHI, "$(MAX_OPERATING_TEMP_FOR_HELIOX)")
+    field(HHSV, "MAJOR")
+
+    field(HIGH, "$(MAX_TEMP_FOR_HE3_COOLING)")
+    field(HSV, "MINOR")
+
+    field(PREC, "4")
+    field(EGU, "K")
+
+    field(UDFS, "NO_ALARM")
+}
+
+record(calcout, "$(P)RECONDENSE:TEMP:SP:_CALC") {
+    field(DESC, "Calc temp to set after recondense")
+    field(SCAN, "Passive")
+
+    field(INPA, "$(P)RECONDENSE:TEMP:SP CP MS")
+    field(CALC, "A < $(MAX_TEMP_FOR_HE3_COOLING)? A : $(DEFAULT_POST_CONDENSE_TEMP_SETPOINT)")
+
+    field(OUT, "$(P)RECONDENSE:TEMP:SP:RBV PP")
+}
+
+record(ai, "$(P)RECONDENSE:TEMP:SP:RBV") {
+    field(DESC, "Temp to set after recondense")
+    field(SCAN, "Passive")
+
+    field(PREC, "4")
+    field(EGU, "K")
+
+    field(UDFS, "NO_ALARM")
+}
