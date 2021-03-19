@@ -141,6 +141,8 @@ record(bo, "$(P)ADJUST_PIDS:SP")
     field(OUT,  "@asyn($(READ),0,1)LUT")
     field(ZNAM, "NO")
     field(ONAM, "YES")
+
+    info(autosaveFields, "VAL")
 }
 
 record(bi, "$(P)ADJUST_PIDS")
@@ -151,6 +153,8 @@ record(bi, "$(P)ADJUST_PIDS")
     field(ZNAM, "NO")
     field(ONAM, "YES")
     field(SCAN, "I/O Intr")
+
+    info(autosaveFields, "VAL")
 }
 
 record(stringin, "$(P)_PID_FILE")
@@ -171,6 +175,8 @@ record(stringout, "$(P)_PID_FILE:SP")
 record(scalcout, "$(P)_PUSH_PID_FILE:SP")
 {
     field(DESC, "Select PID file based on ctrl chan")
+    field(PINI, "YES")
+
     field(INAA, "$(P)HE3POT:PID_FILE CP")
     field(INBB, "$(P)SORB:PID_FILE CP")
     field(INPA, "$(P)CTRLCHANNEL:SP CP")
@@ -182,24 +188,32 @@ record(stringin, "$(P)HE3POT:PID_FILE")
 {
     field(DESC, "Current PID file for the he3pot")
     field(VAL, "Default.txt")
+
+    info(autosaveFields, "VAL")
 }
 
 record(stringout, "$(P)HE3POT:PID_FILE:SP")
 {
     field(DESC, "The user set PID file for the he3pot")
     field(OUT, "$(P)HE3POT:PID_FILE PP")
+
+    info(autosaveFields, "VAL")
 }
 
 record(stringin, "$(P)SORB:PID_FILE")
 {
     field(DESC, "Current PID file for the sorb")
     field(VAL, "Default.txt")
+
+    info(autosaveFields, "VAL")
 }
 
 record(stringout, "$(P)SORB:PID_FILE:SP")
 {
     field(DESC, "The user set PID file for the sorb")
     field(OUT, "$(P)SORB:PID_FILE PP")
+
+    info(autosaveFields, "VAL")
 }
 
 record(ai, "$(P)_P")
