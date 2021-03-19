@@ -1,0 +1,16 @@
+## Status of recondense
+
+record(bi, "$(P)RECONDENSING") {
+    field(DESC, "Is hlx503 recondensing currently")
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+}
+
+record(bo, "$(P)RECONDENSING:SP") {
+    field(DESC, "Is hlx503 recondensing currently")
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+    field(OUT, "$(P)RECONDENSING PP")
+    field(UDFS, "NO_ALARM")
+}
+
