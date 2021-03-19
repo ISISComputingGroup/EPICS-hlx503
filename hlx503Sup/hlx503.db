@@ -27,6 +27,9 @@ record(calc, "$(P)TEMP:HE3POT") {
     field(INPB, "$(P)TEMP:1KPOTHE3POTLO")
     field(INPC, "$(P)TEMP:HE3POT:SP")
     field(CALC, "C > $(MAX_TEMP_FOR_HE3_COOLING) ? A : B")
+
+    field(PREC, "4")
+    field(EGU, "K")
 }
 
 record(ao, "$(P)TEMP:HE3POT:SP") {
@@ -37,6 +40,9 @@ record(ao, "$(P)TEMP:HE3POT:SP") {
     # _CALC will prevent sending of setpoint if INVALID
     field(HIGH, "$(MAX_OPERATING_TEMP_FOR_HELIOX)")
     field(HSV, "INVALID")
+
+    field(PREC, "4")
+    field(EGU, "K")
 }
 
 record(calcout, "$(P)TEMP:HE3POT:SP:_CALC") {
@@ -81,6 +87,9 @@ record(ao, "$(P)TEMP:SORB:SP") {
     field(DTYP, "Soft Channel")
 
     field(FLNK, "$(P)TEMP:SORB:SP:_SEQ PP")
+
+    field(PREC, "4")
+    field(EGU, "K")
 }
 
 record(sseq, "$(P)TEMP:SORB:SP:_SEQ") {
