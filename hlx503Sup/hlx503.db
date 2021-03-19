@@ -34,12 +34,9 @@ record(ao, "$(P)TEMP:HE3POT:SP") {
     field(SCAN, "Passive")
     field(DTYP, "Soft Channel")
 
-    field(DRVH, "$(MAX_OPERATING_TEMP_FOR_HELIOX)")
+    # _CALC will prevent sending of setpoint if INVALID
     field(HIGH, "$(MAX_OPERATING_TEMP_FOR_HELIOX)")
     field(HSV, "INVALID")
-
-    field(DRVL, "-1.0")
-    field(LOW, "-1.0")
 }
 
 record(calcout, "$(P)TEMP:HE3POT:SP:_CALC") {
@@ -49,6 +46,7 @@ record(calcout, "$(P)TEMP:HE3POT:SP:_CALC") {
     field(INPA, "$(P)TEMP:HE3POT:SP CP MS")
     field(CALC, "A")
 
+    # Do not send setpoint if TEMP:HE3POT:SP is in invalid alarm (above max operating temp)
     field(IVOA, "Don't drive outputs")
     field(OUT, "$(P)TEMP:HE3POT:SP:_SEQ PP")
 }
@@ -60,6 +58,7 @@ record(seq, "$(P)TEMP:HE3POT:SP:_SEQ") {
     field(DOL0, "1")
     field(LNK0, "$(P)TEMP:HE3POT:_CTRLCHANNEL PP")
 
+    # Wait for control channel (and if ADJUST_PIDS is YES then PID_FILE) to be set
     field(DOL1, "$(P)TEMP:HE3POT:SP")
     field(LNK1, "$(P)TEMP:SP PP")
     field(DLY1, "0.1")
@@ -87,9 +86,11 @@ record(ao, "$(P)TEMP:SORB:SP") {
 record(sseq, "$(P)TEMP:SORB:SP:_SEQ") {
     field(DESC, "Sequence setpoint actions")
 
+    # Control heater output based on sorb sensor
     field(STR1, "SORB")
     field(LNK1, "$(P)CTRLCHANNEL:SP PP")
 
+    # Wait for control channel (and if ADJUST_PIDS is YES then PID_FILE) to be set
     field(DOL2, "$(P)TEMP:SORB:SP")
     field(LNK2, "$(P)TEMP:SP PP")
     field(DLY2, "0.1")
@@ -111,28 +112,20 @@ record(sseq, "$(P)HEATER:OFF") {
 
 ## Setting PIDs from file
 
-record(waveform, "$(P)DIRBASE:SP")
-{
-   field(DTYP, "asynOctetWrite")
-   field(INP, "@asyn($(FILELIST),0,1)DIRBASE")
-   field(PINI, "NO")
-   field(FTVL, "CHAR")
-   field(NELM, 256)
-}
-
 record(waveform, "$(P)DIRBASE")
 {
-   field(DTYP, "asynOctetRead")
-   field(INP, "@asyn($(FILELIST),0,1)DIRBASE")
-   field(PINI, "YES")
-   field(FTVL, "CHAR")
-   field(NELM, 256)
-   field(SCAN, "I/O Intr")
+    field(DESC, "Directory of PID files")
+    field(DTYP, "asynOctetRead")
+    field(INP, "@asyn($(FILELIST),0,1)DIRBASE")
+    field(PINI, "YES")
+    field(FTVL, "CHAR")
+    field(NELM, 256)
+    field(SCAN, "I/O Intr")
 }
 
 record(waveform, "$(P)PID_FILES")
 {
-    field(DESC, "Compressed JSON list of calib files")
+    field(DESC, "Compressed JSON list of PID files")
     field(FTVL, "CHAR")
     field(DTYP, "asynOctetRead")
     field(INP, "@asyn($(FILELIST),0,1)JARR")
@@ -140,40 +133,44 @@ record(waveform, "$(P)PID_FILES")
     field(SCAN, "I/O Intr")
 }
 
-record(bo, "$(P)LUTON:SP")
+record(bo, "$(P)ADJUST_PIDS:SP")
 {
-   field(DESC, "Toggles the PID lookup")
-   field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(READ),0,1)LUT")
-   field(ZNAM, "NO")
-   field(ONAM, "YES")
+    field(DESC, "Set whether to adjust PIDs from lookup")
+    field(DESC, "Toggles the PID lookup")
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(READ),0,1)LUT")
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
 }
 
-record(bi, "$(P)LUTON")
+record(bi, "$(P)ADJUST_PIDS")
 {
-   field(DESC, "PID lookup readback")
-   field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(READ),0,1)LUT")
-   field(ZNAM, "NO")
-   field(ONAM, "YES")
-   field(SCAN, "I/O Intr")
+    field(DESC, "Whether to adjust PIDs from lookup")
+    field(DTYP, "asynInt32")
+    field(INP,  "@asyn($(READ),0,1)LUT")
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+    field(SCAN, "I/O Intr")
 }
 
 record(stringin, "$(P)_PID_FILE")
 {
-   field(DTYP, "asynOctetRead")
-   field(INP,  "@asyn($(READ),0,1)DIR")
-   field(SCAN, "I/O Intr")
+    field(DESC, "Current PID file in use")
+    field(DTYP, "asynOctetRead")
+    field(INP,  "@asyn($(READ),0,1)DIR")
+    field(SCAN, "I/O Intr")
 }
 
 record(stringout, "$(P)_PID_FILE:SP")
 {
-   field(DTYP, "asynOctetWrite")
-   field(OUT,  "@asyn($(READ),0,1)DIR")
+    field(DESC, "Set which PID file to use")
+    field(DTYP, "asynOctetWrite")
+    field(OUT,  "@asyn($(READ),0,1)DIR")
 }
 
 record(scalcout, "$(P)_PUSH_PID_FILE:SP")
 {
+    field(DESC, "Select PID file based on ctrl chan")
     field(INAA, "$(P)HE3POT:PID_FILE CP")
     field(INBB, "$(P)SORB:PID_FILE CP")
     field(INPA, "$(P)CTRLCHANNEL:SP CP")
@@ -183,26 +180,31 @@ record(scalcout, "$(P)_PUSH_PID_FILE:SP")
 
 record(stringin, "$(P)HE3POT:PID_FILE")
 {
+    field(DESC, "Current PID file for the he3pot")
     field(VAL, "Default.txt")
 }
 
 record(stringout, "$(P)HE3POT:PID_FILE:SP")
 {
-   field(OUT, "$(P)HE3POT:PID_FILE PP")
+    field(DESC, "The user set PID file for the he3pot")
+    field(OUT, "$(P)HE3POT:PID_FILE PP")
 }
 
 record(stringin, "$(P)SORB:PID_FILE")
 {
+    field(DESC, "Current PID file for the sorb")
     field(VAL, "Default.txt")
 }
 
 record(stringout, "$(P)SORB:PID_FILE:SP")
 {
-      field(OUT, "$(P)SORB:PID_FILE PP")
+    field(DESC, "The user set PID file for the sorb")
+    field(OUT, "$(P)SORB:PID_FILE PP")
 }
 
 record(ai, "$(P)_P")
 {
+    field(DESC, "Lookup proportional")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(READ),0,1)P")
     field(PREC, "5")
@@ -212,6 +214,7 @@ record(ai, "$(P)_P")
 
 record(ao, "$(P)_P:SP")
 {
+    field(DESC, "Forward lookup P to device")
     field(DTYP, "Soft Channel")
     field(DOL, "$(P)_P")
     field(OMSL, "closed_loop")
@@ -221,6 +224,7 @@ record(ao, "$(P)_P:SP")
 
 record(ai, "$(P)_I")
 {
+    field(DESC, "Lookup integral")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(READ),0,1)I")
     field(PREC, "5")
@@ -230,6 +234,7 @@ record(ai, "$(P)_I")
 
 record(ao, "$(P)_I:SP")
 {
+    field(DESC, "Forward lookup I to device")
     field(DTYP, "Soft Channel")
     field(DOL, "$(P)_I")
     field(OMSL, "closed_loop")
@@ -239,6 +244,7 @@ record(ao, "$(P)_I:SP")
 
 record(ai, "$(P)_D")
 {
+    field(DESC, "Lookup derivative")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(READ),0,1)D")
     field(PREC, "5")
@@ -248,6 +254,7 @@ record(ai, "$(P)_D")
 
 record(ao, "$(P)_D:SP")
 {
+    field(DESC, "Forward lookup D to device")
     field(DTYP, "Soft Channel")
     field(DOL, "$(P)_D")
     field(OMSL, "closed_loop")
