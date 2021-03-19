@@ -179,7 +179,9 @@ record(stringout, "$(P)_PID_FILE:SP")
     field(DESC, "Set which PID file to use")
     field(DTYP, "asynOctetWrite")
     field(OUT,  "@asyn($(READ),0,1)DIR")
+    field(FLNK, "$(P)ADJUST_PIDS:SP PP")
 }
+
 
 record(scalcout, "$(P)_PUSH_PID_FILE:SP")
 {
