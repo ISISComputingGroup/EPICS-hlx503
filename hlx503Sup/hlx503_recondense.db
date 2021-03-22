@@ -13,7 +13,7 @@ record(bo, "$(P)RECONDENSING:SP") {
     field(UDFS, "NO_ALARM")
 }
 
-record(mbbi, "$(P)RECONDENSE:PART") {
+record(mbbo, "$(P)RECONDENSE:PART") {
     field(DESC, "The part of the recondense we are on")
 
     field(ZRVL, "0")
@@ -33,48 +33,15 @@ record(mbbi, "$(P)RECONDENSE:PART") {
 
     field(FVVL, "5")
     field(FVST, "NOT RECONDENSING")
-}
-
-record(mbbo, "$(P)RECONDENSE:PART:SP") {
-    field(DESC, "The part of the recondense we are on")
-
-    field(ZRVL, "0")
-    field(ZRST, "SETUP")
-
-    field(ONVL, "1")
-    field(ONST, "PART 1")
-
-    field(TWVL, "2")
-    field(TWST, "PART 2")
-
-    field(THVL, "3")
-    field(THST, "PART 3")
-
-    field(FRVL, "4")
-    field(FRST, "FINISHING")
-
-    field(FVVL, "5")
-    field(FVST, "NOT RECONDENSING")
-    
-    field(OUT, "$(P)RECONDENSE:PART PP")
 
     field(UDFS, "NO_ALARM")
 }
 
-record(bi, "$(P)RECONDENSE:TIMED_OUT") {
+record(bo, "$(P)RECONDENSE:TIMED_OUT") {
     field(DESC, "Did the last recondense time out")
 
     field(ZNAM, "NO")
     field(ONAM, "YES")
-}
-
-record(bo, "$(P)RECONDENSE:TIMED_OUT:SP") {
-    field(DESC, "Set if the recondense timed out")
-
-    field(ZNAM, "NO")
-    field(ONAM, "YES")
-
-    field(OUT, "$(P)RECONDENSE:TIMED_OUT PP")
 
     field(UDFS, "NO_ALARM")
 }
@@ -91,8 +58,6 @@ record(bo, "$(P)RECONDENSE:SKIPPED:SP") {
 
     field(ZNAM, "NO")
     field(ONAM, "YES")
-
-    field(OUT, "$(P)RECONDENSE:SKIPPED PP")
 
     field(UDFS, "NO_ALARM")
 }
@@ -131,20 +96,6 @@ record(ai, "$(P)RECONDENSE:TEMP:SP:RBV") {
 
     field(PREC, "4")
     field(EGU, "K")
-
-    field(UDFS, "NO_ALARM")
-}
-
-record(ao, "$(P)RECONDENSE:TEMP:_FORWARD") {
-    field(DESC, "Forward condense temp set to device")
-    field(SCAN, "Passive")
-
-    field(PREC, "4")
-    field(EGU, "K")
-    
-    field(DOL, "$(P)RECONDENSE:TEMP:SP:RBV")
-    field(OUT, "$(P)TEMP:HE3POT:SP PP")
-    field(OMSL, "closed_loop")
 
     field(UDFS, "NO_ALARM")
 }
