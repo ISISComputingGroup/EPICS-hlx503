@@ -4,7 +4,7 @@ program hlx503 ("P")
 
 PV(int, recondensing_sp, "{P}RECONDENSING:SP", Monitor);
 PV(int, recondensing, "{P}RECONDENSING", NoMon);
-PV(int, part_sp, "{P}RECONDENSING:PART:SP", NoMon);
+PV(int, part_sp, "{P}RECONDENSE:PART:SP", NoMon);
 
 ss recondense {
     state init {
