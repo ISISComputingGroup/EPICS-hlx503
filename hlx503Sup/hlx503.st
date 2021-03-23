@@ -85,7 +85,6 @@ ss recondense {
         entry { 
             // Set control channel to He3Pot Low temperature
             PVPUTSTR(ctrlchannel_sp, "1KPOTHE3POTLO");
-            errlogSevPrintf(errlogInfo, "%s: Set control channel to %s.\n", "hlx503.st", "1KPOTHE3POTLO");
         }
         when (skipped_sp == 1) {
             PVPUT(skipped, 1);
@@ -114,6 +113,9 @@ ss recondense {
             PVPUT(skipped_sp, 0);
             PVPUT(skipped, 0);
             PVPUT(part, 3);
+            PVPUTSTR(ctrlchannel_sp, "SORB");
+            PVPUT(heater_percent_sp, 0);
+            PVPUT(temp_sorb_sp, 0);
         }
         when (skipped_sp == 1) {
             PVPUT(skipped, 1);
