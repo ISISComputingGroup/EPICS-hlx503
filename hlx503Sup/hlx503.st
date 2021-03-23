@@ -1,6 +1,7 @@
 program hlx503 ("P")
 
 #include "seqPVmacros.h"
+%% #include "errlog.h"
 
 PV(int, recondensing_sp, "{P}RECONDENSING:SP", Monitor);
 PV(int, recondensing, "{P}RECONDENSING", NoMon);
@@ -13,6 +14,7 @@ PV(int, cancelled, "{P}RECONDENSE:CANCELLED", NoMon);
 PV(float, post_condense_temp_sp, "{P}RECONDENSE:TEMP:SP:RBV", Monitor);
 PV(float, temp_he3pot_sp, "{P}TEMP:HE3POT:SP", NoMon);
 PV(float, temp_sorb_sp, "{P}TEMP:SORB:SP", NoMon);
+PV(float, temp_sp, "{P}TEMP:SP", Monitor);
 PV(int, adjust_pids_sp, "{P}ADJUST_PIDS:SP", NoMon);
 PV(int, mode_htr_sp, "{P}MODE:HTR:SP", NoMon);
 PV(float, heater_percent_sp, "{P}HEATERP:SP", NoMon);
@@ -23,6 +25,8 @@ PV(float, recondense_sorb_d, "{P}RECONDENSE:SORB:D:SP:RBV", Monitor);
 PV(float, p_sp, "{P}P:SP", NoMon);
 PV(float, i_sp, "{P}I:SP", NoMon);
 PV(float, d_sp, "{P}D:SP", NoMon);
+PV(string, ctrlchannel, "{P}CTRLCHANNEL", Monitor);
+PV(string, ctrlchannel_sp, "{P}CTRLCHANNEL:SP", NoMon);
 
 ss recondense {
 
@@ -45,10 +49,10 @@ ss recondense {
         }
         when (recondensing_sp == 1) {
             PVPUT(recondensing, 1);
-        } state part1
+        } state part1_a
     }
 
-    state part1 {
+    state part1_a {
         entry {
             // Reset status PVs
             PVPUT(skipped_sp, 0);
@@ -67,6 +71,21 @@ ss recondense {
             PVPUT(p_sp, recondense_sorb_p);
             PVPUT(i_sp, recondense_sorb_i);
             PVPUT(d_sp, recondense_sorb_d);
+        }
+        when (skipped_sp == 1) {
+            PVPUT(skipped, 1);
+        } state part2
+        when (cancelled_sp == 1) {
+            PVPUT(cancelled, 1);
+        } state not_recondensing
+        when (strcmp(ctrlchannel, "SORB") == 0 && temp_sp == recondense_sorb_temp_sp) {} state part1_b
+    }
+
+    state part1_b {
+        entry { 
+            // Set control channel to He3Pot Low temperature
+            PVPUTSTR(ctrlchannel_sp, "1KPOTHE3POTLO");
+            errlogSevPrintf(errlogInfo, "%s: Set control channel to %s.\n", "hlx503.st", "1KPOTHE3POTLO");
         }
         when (skipped_sp == 1) {
             PVPUT(skipped, 1);
