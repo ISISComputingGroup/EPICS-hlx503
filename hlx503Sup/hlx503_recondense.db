@@ -114,3 +114,93 @@ record(ai, "$(P)RECONDENSE:TEMP:SP:RBV") {
 
     field(UDFS, "NO_ALARM")
 }
+
+# Sorb recondense values
+
+record(ao, "$(P)RECONDENSE:SORB:TEMP:SP") {
+    field(DESC, "Temp set for sorb in recondense")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_SORB_TEMP_SET)")
+
+    field(PREC, "4")
+    field(EGU, "K")
+
+    field(OUT, "$(P)RECONDENSE:SORB:TEMP:SP:RBV")
+}
+
+record(ai, "$(P)RECONDENSE:SORB:TEMP:SP:RBV") {
+    field(DESC, "Temp set for sorb in recondense")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_SORB_TEMP_SET)")
+
+    field(PREC, "4")
+    field(EGU, "K")
+}
+
+record(ao, "$(P)RECONDENSE:SORB:P:SP") {
+    field(DESC, "Proportional for sorb in recondense")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_SORB_P)")
+
+    field(PREC, "1")
+    field(EGU, "")
+
+    field(OUT, "$(P)RECONDENSE:SORB:P:SP:RBV")
+}
+
+record(ai, "$(P)RECONDENSE:SORB:P:SP:RBV") {
+    field(DESC, "Proportional for sorb in recondense")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_SORB_P)")
+
+    field(PREC, "1")
+    field(EGU, "")
+}
+
+record(ao, "$(P)RECONDENSE:SORB:I:SP") {
+    field(DESC, "Integral for sorb in recondense")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_SORB_I)")
+
+    field(PREC, "1")
+    field(EGU, "")
+
+    field(OUT, "$(P)RECONDENSE:SORB:I:SP:RBV")
+}
+
+record(ai, "$(P)RECONDENSE:SORB:I:SP:RBV") {
+    field(DESC, "Integral for sorb in recondense")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_SORB_I)")
+
+    field(PREC, "1")
+    field(EGU, "")
+}
+
+record(ao, "$(P)RECONDENSE:SORB:D:SP") {
+    field(DESC, "Derivative for sorb in recondense")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_SORB_D)")
+
+    field(PREC, "1")
+    field(EGU, "")
+
+    field(OUT, "$(P)RECONDENSE:SORB:D:SP:RBV")
+}
+
+record(ai, "$(P)RECONDENSE:SORB:D:SP:RBV") {
+    field(DESC, "Derivative for sorb in recondense")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_SORB_D)")
+
+    field(PREC, "1")
+    field(EGU, "")
+}

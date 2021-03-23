@@ -11,12 +11,18 @@ PV(int, skipped, "{P}RECONDENSE:SKIPPED", NoMon);
 PV(int, cancelled_sp, "{P}RECONDENSE:CANCELLED:SP", Monitor);
 PV(int, cancelled, "{P}RECONDENSE:CANCELLED", NoMon);
 PV(float, post_condense_temp_sp, "{P}RECONDENSE:TEMP:SP:RBV", Monitor);
-PV(float, temp_he3pot_sp, "{P}TEMP:HE3POT:SP", Monitor);
+PV(float, temp_he3pot_sp, "{P}TEMP:HE3POT:SP", NoMon);
+PV(float, temp_sorb_sp, "{P}TEMP:SORB:SP", NoMon);
 PV(int, adjust_pids_sp, "{P}ADJUST_PIDS:SP", NoMon);
 PV(int, mode_htr_sp, "{P}MODE:HTR:SP", NoMon);
-PV(int, heater_percent_sp, "{P}HEATERP:SP", NoMon);
-PV(int, temp_sp, "{P}TEMP:SP", NoMon);
-PV(string, ctrlchannel_sp, "{P}CTRLCHANNEL:SP", NoMon);
+PV(float, heater_percent_sp, "{P}HEATERP:SP", NoMon);
+PV(float, recondense_sorb_temp_sp, "{P}RECONDENSE:SORB:TEMP:SP:RBV", Monitor);
+PV(float, recondense_sorb_p, "{P}RECONDENSE:SORB:P:SP:RBV", Monitor);
+PV(float, recondense_sorb_i, "{P}RECONDENSE:SORB:I:SP:RBV", Monitor);
+PV(float, recondense_sorb_d, "{P}RECONDENSE:SORB:D:SP:RBV", Monitor);
+PV(float, p_sp, "{P}P:SP", NoMon);
+PV(float, i_sp, "{P}I:SP", NoMon);
+PV(float, d_sp, "{P}D:SP", NoMon);
 
 ss recondense {
 
@@ -56,8 +62,11 @@ ss recondense {
             // Set heater to manual, 0% and temp setpoint to 0K
             PVPUT(mode_htr_sp, 0);
             PVPUT(heater_percent_sp, 0);
-            PVPUT(temp_sp, 0);
-            // Set to sorb control channel and temperature
+            // Set control channel, temperature and PIDs
+            PVPUT(temp_sorb_sp, recondense_sorb_temp_sp);
+            PVPUT(p_sp, recondense_sorb_p);
+            PVPUT(i_sp, recondense_sorb_i);
+            PVPUT(d_sp, recondense_sorb_d);
         }
         when (skipped_sp == 1) {
             PVPUT(skipped, 1);
