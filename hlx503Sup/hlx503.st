@@ -8,19 +8,30 @@ PV(int, part, "{P}RECONDENSE:PART", NoMon);
 PV(int, timed_out, "{P}RECONDENSE:TIMED_OUT", NoMon);
 PV(int, skipped_sp, "{P}RECONDENSE:SKIPPED:SP", Monitor);
 PV(int, skipped, "{P}RECONDENSE:SKIPPED", NoMon);
+PV(int, cancelled_sp, "{P}RECONDENSE:CANCELLED:SP", Monitor);
+PV(int, cancelled, "{P}RECONDENSE:CANCELLED", NoMon);
 PV(float, post_condense_temp_sp, "{P}RECONDENSE:TEMP:SP:RBV", Monitor);
-PV(float, temp_he3pot_sp, "{P}TEMP:HE3POT:SP", NoMon);
+PV(float, temp_he3pot_sp, "{P}TEMP:HE3POT:SP", Monitor);
+PV(int, adjust_pids_sp, "{P}ADJUST_PIDS:SP", NoMon);
 
 ss recondense {
+
+    state init {
+        entry {
+            PVPUT(skipped_sp, 0);
+            PVPUT(skipped, 0);
+            PVPUT(cancelled_sp, 0);
+            PVPUT(cancelled, 0);
+            PVPUT(timed_out, 0);
+        }
+        when () {} state not_recondensing
+    }
 
     state not_recondensing {
         entry {
             PVPUT(recondensing_sp, 0);
             PVPUT(recondensing, 0);
             PVPUT(part, 0);
-            PVPUT(timed_out, 0);
-            PVPUT(skipped_sp, 0);
-            PVPUT(skipped, 0);
         }
         when (recondensing_sp == 1) {
             PVPUT(recondensing, 1);
@@ -31,11 +42,18 @@ ss recondense {
         entry {
             PVPUT(skipped_sp, 0);
             PVPUT(skipped, 0);
+            PVPUT(cancelled_sp, 0);
+            PVPUT(cancelled, 0);
             PVPUT(part, 1);
+            PVPUT(timed_out, 0);
+            PVPUT(adjust_pids_sp, 0);
         }
         when (skipped_sp == 1) {
             PVPUT(skipped, 1);
         } state part2
+        when (cancelled_sp == 1) {
+            PVPUT(cancelled, 1);
+        } state not_recondensing
     }
 
     state part2 {
@@ -47,6 +65,9 @@ ss recondense {
         when (skipped_sp == 1) {
             PVPUT(skipped, 1);
         } state part3
+        when (cancelled_sp == 1) {
+            PVPUT(cancelled, 1);
+        } state not_recondensing
     }
 
     state part3 {
@@ -58,6 +79,9 @@ ss recondense {
         when (skipped_sp == 1) {
             PVPUT(skipped, 1);
         } state finish
+        when (cancelled_sp == 1) {
+            PVPUT(cancelled, 1);
+        } state not_recondensing
     }
 
     state finish {

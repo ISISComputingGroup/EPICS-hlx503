@@ -59,6 +59,22 @@ record(bo, "$(P)RECONDENSE:SKIPPED:SP") {
     field(UDFS, "NO_ALARM")
 }
 
+record(bi, "$(P)RECONDENSE:CANCELLED") {
+    field(DESC, "Has the recondense part been cancelled")
+
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+}
+
+record(bo, "$(P)RECONDENSE:CANCELLED:SP") {
+    field(DESC, "Set the recondense part to cancelled")
+
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+
+    field(UDFS, "NO_ALARM")
+}
+
 ## Temperature to set after the recondense is complete
 
 record(ao, "$(P)RECONDENSE:TEMP:SP") {
