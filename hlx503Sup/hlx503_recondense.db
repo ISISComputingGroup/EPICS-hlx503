@@ -139,6 +139,28 @@ record(ai, "$(P)RECONDENSE:SORB:TEMP:SP:RBV") {
     field(EGU, "K")
 }
 
+record(ao, "$(P)RECONDENSE:SORB:TEMP:FINAL:SP") {
+    field(DESC, "Final temp target for sorb recondense")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_SORB_TEMP_FINAL)")
+
+    field(PREC, "4")
+    field(EGU, "K")
+
+    field(OUT, "$(P)RECONDENSE:SORB:TEMP:FINAL:SP:RBV")
+}
+
+record(ai, "$(P)RECONDENSE:SORB:TEMP:FINAL:SP:RBV") {
+    field(DESC, "Final temp target for sorb recondense")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_SORB_TEMP_FINAL)")
+
+    field(PREC, "4")
+    field(EGU, "K")
+}
+
 record(ao, "$(P)RECONDENSE:SORB:P:SP") {
     field(DESC, "Proportional for sorb in recondense")
     field(SCAN, "Passive")
@@ -203,4 +225,72 @@ record(ai, "$(P)RECONDENSE:SORB:D:SP:RBV") {
 
     field(PREC, "1")
     field(EGU, "")
+}
+
+## Recondense He3Pot targets
+
+record(ao, "$(P)RECONDENSE:HE3POT:TEMP:PART1:SP") {
+    field(DESC, "Target for He3Pot temp in part 1")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_HE3POT_TARGET_TEMP_PART1)")
+
+    field(PREC, "4")
+    field(EGU, "K")
+
+    field(OUT, "$(P)RECONDENSE:HE3POT:TEMP:PART1")
+}
+
+record(ai, "$(P)RECONDENSE:HE3POT:TEMP:PART1") {
+    field(DESC, "Target for He3Pot temp in part 1")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_HE3POT_TARGET_TEMP_PART1)")
+
+    field(PREC, "4")
+    field(EGU, "K")
+}
+
+record(ao, "$(P)RECONDENSE:HE3POT:TEMP:PART2:SP") {
+    field(DESC, "Target for He3Pot temp in part 2")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_HE3POT_TARGET_TEMP_PART2)")
+
+    field(PREC, "4")
+    field(EGU, "K")
+
+    field(OUT, "$(P)RECONDENSE:HE3POT:TEMP:PART2")
+}
+
+record(ai, "$(P)RECONDENSE:HE3POT:TEMP:PART2") {
+    field(DESC, "Target for He3Pot temp in part 2")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_HE3POT_TARGET_TEMP_PART2)")
+
+    field(PREC, "4")
+    field(EGU, "K")
+}
+
+## Time to wait after part 2
+
+record(longout, "$(P)RECONDENSE:PART2:WAIT_TIME:SP") {
+    field(DESC, "Time to wait in seconds after part 2")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_POST_PART2_WAIT_TIME)")
+
+    field(EGU, "seconds")
+
+    field(OUT, "$(P)RECONDENSE:PART2:WAIT_TIME")
+}
+
+record(longin, "$(P)RECONDENSE:PART2:WAIT_TIME") {
+    field(DESC, "Time to wait in seconds after part 2")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_POST_PART2_WAIT_TIME)")
+
+    field(EGU, "seconds")
 }
