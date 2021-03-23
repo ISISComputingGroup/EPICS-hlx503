@@ -1,7 +1,6 @@
-#include "seqPVmacros.h"
-
 program hlx503 ("P")
 
+#include "seqPVmacros.h"
 
 PV(int, recondensing_sp, "{P}RECONDENSING:SP", Monitor);
 PV(int, recondensing, "{P}RECONDENSING", NoMon);
@@ -10,33 +9,21 @@ PV(int, timed_out, "{P}RECONDENSE:TIMED_OUT", NoMon);
 PV(int, skipped_sp, "{P}RECONDENSE:SKIPPED:SP", Monitor);
 PV(int, skipped, "{P}RECONDENSE:SKIPPED", NoMon);
 PV(float, post_condense_temp_sp, "{P}RECONDENSE:TEMP:SP:RBV", Monitor);
-PV(float, temp_he3pot_sp, "{P}TEMP:HE3POT:SP", Monitor);
-
+PV(float, temp_he3pot_sp, "{P}TEMP:HE3POT:SP", NoMon);
 
 ss recondense {
 
-    state init {
+    state not_recondensing {
         entry {
             PVPUT(recondensing_sp, 0);
             PVPUT(recondensing, 0);
-            PVPUT(part, 5);
+            PVPUT(part, 0);
             PVPUT(timed_out, 0);
             PVPUT(skipped_sp, 0);
             PVPUT(skipped, 0);
         }
         when (recondensing_sp == 1) {
             PVPUT(recondensing, 1);
-        } state setup
-    }
-
-    state setup {
-        entry {
-            PVPUT(skipped_sp, 0);
-            PVPUT(skipped, 0);
-            PVPUT(part, 0);
-        }
-        when (skipped_sp == 1) {
-            PVPUT(skipped, 1);
         } state part1
     }
 
@@ -75,11 +62,10 @@ ss recondense {
 
     state finish {
         entry {
-            PVPUT(skipped_sp, 0);
-            PVPUT(skipped, 0);
             PVPUT(part, 4);
         }
-        when() {} state finish
+        when () {
+            PVPUT(temp_he3pot_sp, post_condense_temp_sp);
+        } state not_recondensing
     }
-
 }

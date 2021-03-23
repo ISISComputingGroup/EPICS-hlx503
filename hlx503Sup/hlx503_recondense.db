@@ -17,7 +17,7 @@ record(mbbo, "$(P)RECONDENSE:PART") {
     field(DESC, "The part of the recondense we are on")
 
     field(ZRVL, "0")
-    field(ZRST, "SETUP")
+    field(ZRST, "NOT RECONDENSING")
 
     field(ONVL, "1")
     field(ONST, "PART 1")
@@ -30,9 +30,6 @@ record(mbbo, "$(P)RECONDENSE:PART") {
 
     field(FRVL, "4")
     field(FRST, "FINISHING")
-
-    field(FVVL, "5")
-    field(FVST, "NOT RECONDENSING")
 
     field(UDFS, "NO_ALARM")
 }
@@ -93,6 +90,8 @@ record(calcout, "$(P)RECONDENSE:TEMP:SP:_CALC") {
 record(ai, "$(P)RECONDENSE:TEMP:SP:RBV") {
     field(DESC, "Temp to set after recondense")
     field(SCAN, "Passive")
+
+    field(VAL, "$(DEFAULT_POST_CONDENSE_TEMP_SETPOINT)")
 
     field(PREC, "4")
     field(EGU, "K")
