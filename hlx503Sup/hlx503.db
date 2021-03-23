@@ -145,7 +145,6 @@ record(waveform, "$(P)PID_FILES")
 record(bo, "$(P)ADJUST_PIDS:SP")
 {
     field(DESC, "Set whether to adjust PIDs from lookup")
-    field(DESC, "Toggles the PID lookup")
     field(DTYP, "asynInt32")
     field(OUT,  "@asyn($(READ),0,1)LUT")
     field(ZNAM, "NO")
