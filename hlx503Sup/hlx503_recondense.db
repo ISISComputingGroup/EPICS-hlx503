@@ -98,14 +98,25 @@ record(ao, "$(P)RE:TEMP:SP") {
     field(UDFS, "NO_ALARM")
 }
 
+record(calcout, "$(P)RE:TEMP:SP:_CALC_HIGH") {
+    field(DESC, "Calc HIGH for RE:TEMP:SP")
+    field(SCAN, "Passive")
+
+    field(INPA, "$(P)MAX_TEMP_FOR_HE3_COOLING CP")
+    field(CALC, "A")
+
+    field(OUT, "$(P)RE:TEMP:SP.HIGH PP")
+}
+
 record(calcout, "$(P)RE:TEMP:SP:_CALC") {
     field(DESC, "Calc temp to set after recondense")
     field(SCAN, "Passive")
 
     field(INPA, "$(P)RE:TEMP:SP CP MS")
-    field(CALC, "A < $(MAX_TEMP_FOR_HE3_COOLING)? A : $(DEFAULT_POST_CONDENSE_TEMP_SETPOINT)")
+    field(INPB, "$(P)MAX_TEMP_FOR_HE3_COOLING CP")
+    field(CALC, "A < B ? A : $(DEFAULT_POST_CONDENSE_TEMP_SETPOINT)")
 
-    field(OUT, "$(P)RE:TEMP PP")
+    field(OUT, "$(P)RE:TEMP PP MS")
 }
 
 record(ai, "$(P)RE:TEMP") {
