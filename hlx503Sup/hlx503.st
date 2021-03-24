@@ -1,27 +1,26 @@
 program hlx503 ("P")
 
 #include "seqPVmacros.h"
-%% #include "errlog.h"
 
 PV(int, recondensing_sp, "{P}RECONDENSING:SP", Monitor);
 PV(int, recondensing, "{P}RECONDENSING", NoMon);
-PV(int, part, "{P}RECONDENSE:PART", NoMon);
-PV(int, timed_out, "{P}RECONDENSE:TIMED_OUT", NoMon);
-PV(int, skipped_sp, "{P}RECONDENSE:SKIPPED:SP", Monitor);
-PV(int, skipped, "{P}RECONDENSE:SKIPPED", NoMon);
-PV(int, cancelled_sp, "{P}RECONDENSE:CANCELLED:SP", Monitor);
-PV(int, cancelled, "{P}RECONDENSE:CANCELLED", NoMon);
-PV(float, post_condense_temp_sp, "{P}RECONDENSE:TEMP:SP:RBV", Monitor);
+PV(int, part, "{P}RE:PART", NoMon);
+PV(int, timed_out, "{P}RE:TIMED_OUT", NoMon);
+PV(int, skipped_sp, "{P}RE:SKIPPED:SP", Monitor);
+PV(int, skipped, "{P}RE:SKIPPED", NoMon);
+PV(int, cancelled_sp, "{P}RE:CANCELLED:SP", Monitor);
+PV(int, cancelled, "{P}RE:CANCELLED", NoMon);
+PV(float, post_condense_temp_sp, "{P}RE:TEMP", Monitor);
 PV(float, temp_he3pot_sp, "{P}TEMP:HE3POT:SP", NoMon);
 PV(float, temp_sorb_sp, "{P}TEMP:SORB:SP", NoMon);
 PV(float, temp_sp, "{P}TEMP:SP", Monitor);
 PV(int, adjust_pids_sp, "{P}ADJUST_PIDS:SP", NoMon);
 PV(int, mode_htr_sp, "{P}MODE:HTR:SP", NoMon);
 PV(float, heater_percent_sp, "{P}HEATERP:SP", NoMon);
-PV(float, recondense_sorb_temp_sp, "{P}RECONDENSE:SORB:TEMP:SP:RBV", Monitor);
-PV(float, recondense_sorb_p, "{P}RECONDENSE:SORB:P:SP:RBV", Monitor);
-PV(float, recondense_sorb_i, "{P}RECONDENSE:SORB:I:SP:RBV", Monitor);
-PV(float, recondense_sorb_d, "{P}RECONDENSE:SORB:D:SP:RBV", Monitor);
+PV(float, recondense_sorb_temp_sp, "{P}RE:SORB:TEMP", Monitor);
+PV(float, recondense_sorb_p, "{P}RE:SORB:P", Monitor);
+PV(float, recondense_sorb_i, "{P}RE:SORB:I", Monitor);
+PV(float, recondense_sorb_d, "{P}RE:SORB:D", Monitor);
 PV(float, p_sp, "{P}P:SP", NoMon);
 PV(float, i_sp, "{P}I:SP", NoMon);
 PV(float, d_sp, "{P}D:SP", NoMon);
