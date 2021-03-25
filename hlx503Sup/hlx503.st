@@ -26,6 +26,8 @@ PV(float, i_sp, "{P}I:SP", NoMon);
 PV(float, d_sp, "{P}D:SP", NoMon);
 PV(string, ctrlchannel, "{P}CTRLCHANNEL", Monitor);
 PV(string, ctrlchannel_sp, "{P}CTRLCHANNEL:SP", NoMon);
+PV(int, timeout, "{P}RE:TIMEOUT", Monitor);
+PV(int, timeout_on, "{P}RE:TIMEOUT:ON", Monitor);
 
 ss recondense {
 
@@ -48,10 +50,10 @@ ss recondense {
         }
         when (recondensing_sp == 1) {
             PVPUT(recondensing, 1);
-        } state part1_a
+        } state part1
     }
 
-    state part1_a {
+    state part1 {
         entry {
             // Reset status PVs
             PVPUT(skipped_sp, 0);
@@ -77,20 +79,9 @@ ss recondense {
         when (cancelled_sp == 1) {
             PVPUT(cancelled, 1);
         } state not_recondensing
-        when (strcmp(ctrlchannel, "SORB") == 0 && temp_sp == recondense_sorb_temp_sp) {} state part1_b
-    }
-
-    state part1_b {
-        entry { 
-            // Set control channel to He3Pot Low temperature
-            PVPUTSTR(ctrlchannel_sp, "1KPOTHE3POTLO");
-        }
-        when (skipped_sp == 1) {
-            PVPUT(skipped, 1);
-        } state part2
-        when (cancelled_sp == 1) {
-            PVPUT(cancelled, 1);
-        } state not_recondensing
+        when(timeout_on == 1 && delay(timeout)) {
+            PVPUT(timed_out, 1);
+        } state finish
     }
 
     state part2 {
@@ -105,6 +96,9 @@ ss recondense {
         when (cancelled_sp == 1) {
             PVPUT(cancelled, 1);
         } state not_recondensing
+        when(timeout_on == 1 && delay(timeout)) {
+            PVPUT(timed_out, 1);
+        } state finish
     }
 
     state part3 {
@@ -122,6 +116,9 @@ ss recondense {
         when (cancelled_sp == 1) {
             PVPUT(cancelled, 1);
         } state not_recondensing
+        when(timeout_on == 1 && delay(timeout)) {
+            PVPUT(timed_out, 1);
+        } state finish
     }
 
     state finish {

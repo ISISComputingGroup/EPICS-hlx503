@@ -310,3 +310,47 @@ record(longin, "$(P)RE:PART2:WAIT_TIME") {
 
     field(EGU, "seconds")
 }
+
+## Timeout control
+
+record(longin, "$(P)RE:TIMEOUT") {
+    field(DESC, "The time to wait before part timeout")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_PART_TIMEOUT)")
+
+    field(EGU, "seconds")
+}
+
+record(longout, "$(P)RE:TIMEOUT:SP") {
+    field(DESC, "The time to wait before part timeout")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_PART_TIMEOUT)")
+
+    field(EGU, "seconds")
+
+    field(OUT, "$(P)RE:TIMEOUT PP")
+}
+
+record(bi, "$(P)RE:TIMEOUT:ON") {
+    field(DESC, "Whether to use timeout control")
+    field(SCAN, "Passive")
+
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+    
+    field(VAL, "$(RECONDENSE_PART_TIMEOUT_ON)")
+}
+
+record(bo, "$(P)RE:TIMEOUT:ON:SP") {
+    field(DESC, "The time to wait before part timeout")
+    field(SCAN, "Passive")
+
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+
+    field(VAL, "$(RECONDENSE_PART_TIMEOUT_ON)")
+
+    field(OUT, "$(P)RE:TIMEOUT:ON PP")
+}
