@@ -1,0 +1,415 @@
+## Status of recondense
+
+record(bi, "$(P)RECONDENSING") {
+    field(DESC, "Is hlx503 recondensing currently")
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+    field(UDFS, "NO_ALARM")
+}
+
+record(bo, "$(P)RECONDENSING:SP") {
+    field(DESC, "Is hlx503 recondensing currently")
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+    field(UDFS, "NO_ALARM")
+}
+
+record(mbbo, "$(P)RE:PART") {
+    field(DESC, "The part of the recondense we are on")
+
+    field(ZRVL, "0")
+    field(ZRST, "NOT RECONDENSING")
+
+    field(ONVL, "1")
+    field(ONST, "PART 1")
+
+    field(TWVL, "2")
+    field(TWST, "PART 2")
+
+    field(THVL, "3")
+    field(THST, "PART 3")
+
+    field(FRVL, "4")
+    field(FRST, "FINISHING")
+
+    field(UDFS, "NO_ALARM")
+}
+
+record(bo, "$(P)RE:TIMED_OUT") {
+    field(DESC, "Did the last recondense time out")
+
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+
+    field(UDFS, "NO_ALARM")
+}
+
+record(bi, "$(P)RE:SKIPPED") {
+    field(DESC, "Has the recondense part been skipped")
+
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+
+    field(UDFS, "NO_ALARM")
+}
+
+record(bi, "$(P)RE:SUCCESS") {
+    field(DESC, "Has the recondense been successful")
+
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+
+    field(UDFS, "NO_ALARM")
+}
+
+record(bi, "$(P)RE:SUCCESS:_PART") {
+    field(DESC, "Was last recondense part successful")
+
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+
+    field(UDFS, "NO_ALARM")
+}
+
+record(bo, "$(P)RE:SKIPPED:SP") {
+    field(DESC, "Set if the recondense part was skipped")
+
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+
+    field(UDFS, "NO_ALARM")
+}
+
+record(bi, "$(P)RE:CANCELLED") {
+    field(DESC, "Has the recondense part been cancelled")
+
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+
+    field(UDFS, "NO_ALARM")
+}
+
+record(bo, "$(P)RE:CANCELLED:SP") {
+    field(DESC, "Set the recondense part to cancelled")
+
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+
+    field(UDFS, "NO_ALARM")
+}
+
+## Temperature to set after the recondense is complete
+
+record(ao, "$(P)RE:TEMP:SP") {
+    field(DESC, "Temp setpoint to set after recondense")
+    field(SCAN, "Passive")
+
+    field(HIHI, "$(MAX_OPERATING_TEMP_FOR_HELIOX)")
+    field(HHSV, "MAJOR")
+
+    field(HIGH, "$(MAX_TEMP_FOR_HE3_COOLING)")
+    field(HSV, "MINOR")
+
+    field(PREC, "4")
+    field(EGU, "K")
+
+    field(UDFS, "NO_ALARM")
+}
+
+record(calcout, "$(P)RE:TEMP:SP:_CALC_HIGH") {
+    field(DESC, "Calc HIGH for RE:TEMP:SP")
+    field(SCAN, "Passive")
+
+    field(INPA, "$(P)MAX_TEMP_FOR_HE3_COOLING CP")
+    field(CALC, "A")
+
+    field(OUT, "$(P)RE:TEMP:SP.HIGH PP")
+}
+
+record(calcout, "$(P)RE:TEMP:SP:_CALC") {
+    field(DESC, "Calc temp to set after recondense")
+    field(SCAN, "Passive")
+
+    field(INPA, "$(P)RE:TEMP:SP CP MS")
+    field(INPB, "$(P)MAX_TEMP_FOR_HE3_COOLING CP")
+    field(CALC, "A < B ? A : $(DEFAULT_POST_CONDENSE_TEMP_SETPOINT)")
+
+    field(OUT, "$(P)RE:TEMP PP MS")
+}
+
+record(ai, "$(P)RE:TEMP") {
+    field(DESC, "Temp to set after recondense")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(DEFAULT_POST_CONDENSE_TEMP_SETPOINT)")
+
+    field(PREC, "4")
+    field(EGU, "K")
+
+    field(UDFS, "NO_ALARM")
+}
+
+# Sorb recondense values
+
+record(ao, "$(P)RE:SORB:TEMP:SP") {
+    field(DESC, "Temp set for sorb in recondense")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_SORB_TEMP_SET)")
+
+    field(PREC, "4")
+    field(EGU, "K")
+
+    field(OUT, "$(P)RE:SORB:TEMP PP")
+}
+
+record(ai, "$(P)RE:SORB:TEMP") {
+    field(DESC, "Temp set for sorb in recondense")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_SORB_TEMP_SET)")
+
+    field(PREC, "4")
+    field(EGU, "K")
+}
+
+record(ao, "$(P)RE:SORB:TEMP:FIN:SP") {
+    field(DESC, "Final temp target for sorb recondense")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_SORB_TEMP_FINAL)")
+
+    field(PREC, "4")
+    field(EGU, "K")
+
+    field(OUT, "$(P)RE:SORB:TEMP:FIN PP")
+}
+
+record(ai, "$(P)RE:SORB:TEMP:FIN") {
+    field(DESC, "Final temp target for sorb recondense")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_SORB_TEMP_FINAL)")
+
+    field(PREC, "4")
+    field(EGU, "K")
+}
+
+record(ao, "$(P)RE:SORB:P:SP") {
+    field(DESC, "Proportional for sorb in recondense")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_SORB_P)")
+
+    field(PREC, "1")
+    field(EGU, "")
+
+    field(OUT, "$(P)RE:SORB:P PP")
+}
+
+record(ai, "$(P)RE:SORB:P") {
+    field(DESC, "Proportional for sorb in recondense")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_SORB_P)")
+
+    field(PREC, "1")
+    field(EGU, "")
+}
+
+record(ao, "$(P)RE:SORB:I:SP") {
+    field(DESC, "Integral for sorb in recondense")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_SORB_I)")
+
+    field(PREC, "1")
+    field(EGU, "")
+
+    field(OUT, "$(P)RE:SORB:I PP")
+}
+
+record(ai, "$(P)RE:SORB:I") {
+    field(DESC, "Integral for sorb in recondense")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_SORB_I)")
+
+    field(PREC, "1")
+    field(EGU, "")
+}
+
+record(ao, "$(P)RE:SORB:D:SP") {
+    field(DESC, "Derivative for sorb in recondense")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_SORB_D)")
+
+    field(PREC, "1")
+    field(EGU, "")
+
+    field(OUT, "$(P)RE:SORB:D PP")
+}
+
+record(ai, "$(P)RE:SORB:D") {
+    field(DESC, "Derivative for sorb in recondense")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_SORB_D)")
+
+    field(PREC, "1")
+    field(EGU, "")
+}
+
+## Recondense He3Pot targets
+
+record(ao, "$(P)RE:HE3POT:TEMP:PART1:SP") {
+    field(DESC, "Target for He3Pot temp in part 1")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_HE3POT_TARGET_TEMP_PART1)")
+
+    field(PREC, "4")
+    field(EGU, "K")
+
+    field(OUT, "$(P)RE:HE3POT:TEMP:PART1 PP")
+}
+
+record(ai, "$(P)RE:HE3POT:TEMP:PART1") {
+    field(DESC, "Target for He3Pot temp in part 1")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_HE3POT_TARGET_TEMP_PART1)")
+
+    field(PREC, "4")
+    field(EGU, "K")
+}
+
+record(ao, "$(P)RE:HE3POT:TEMP:PART2:SP") {
+    field(DESC, "Target for He3Pot temp in part 2")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_HE3POT_TARGET_TEMP_PART2)")
+
+    field(PREC, "4")
+    field(EGU, "K")
+
+    field(OUT, "$(P)RE:HE3POT:TEMP:PART2 PP")
+}
+
+record(ai, "$(P)RE:HE3POT:TEMP:PART2") {
+    field(DESC, "Target for He3Pot temp in part 2")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_HE3POT_TARGET_TEMP_PART2)")
+
+    field(PREC, "4")
+    field(EGU, "K")
+}
+
+## Time to wait after part 2
+
+record(longout, "$(P)RE:PART2:WAIT_TIME:SP") {
+    field(DESC, "Time to wait in seconds after part 2")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_POST_PART2_WAIT_TIME)")
+
+    field(EGU, "seconds")
+
+    field(OUT, "$(P)RE:PART2:WAIT_TIME PP")
+}
+
+record(longin, "$(P)RE:PART2:WAIT_TIME") {
+    field(DESC, "Time to wait in seconds after part 2")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_POST_PART2_WAIT_TIME)")
+
+    field(EGU, "seconds")
+}
+
+## Timeout control
+
+record(longin, "$(P)RE:TIMEOUT") {
+    field(DESC, "The time to wait before part timeout")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_PART_TIMEOUT)")
+
+    field(EGU, "seconds")
+}
+
+record(longout, "$(P)RE:TIMEOUT:SP") {
+    field(DESC, "The time to wait before part timeout")
+    field(SCAN, "Passive")
+
+    field(VAL, "$(RECONDENSE_PART_TIMEOUT)")
+
+    field(EGU, "seconds")
+
+    field(OUT, "$(P)RE:TIMEOUT PP")
+}
+
+record(bi, "$(P)RE:TIMEOUT:ON") {
+    field(DESC, "Whether to use timeout control")
+    field(SCAN, "Passive")
+
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+    
+    field(VAL, "$(RECONDENSE_PART_TIMEOUT_ON)")
+}
+
+record(bo, "$(P)RE:TIMEOUT:ON:SP") {
+    field(DESC, "The time to wait before part timeout")
+    field(SCAN, "Passive")
+
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+
+    field(VAL, "$(RECONDENSE_PART_TIMEOUT_ON)")
+
+    field(OUT, "$(P)RE:TIMEOUT:ON PP")
+}
+
+# PVs for restoring PIDs post-recondense
+
+record(bo, "$(P)RE:_OLD_ADJUST_PIDS") {
+    field(DESC, "Adjust PIDs from lookup post recondense")
+
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+}
+
+record(bo, "$(P)RE:_OLD_AUTOPID") {
+    field(DESC, "Automatic PID setting to restore")
+    field(SCAN, "Passive")
+
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+}
+
+record(ao, "$(P)RE:_OLD_P") {
+    field(DESC, "PID P to restore")
+    field(SCAN, "Passive")
+
+    field(PREC, "1")
+    field(EGU, "")
+}
+
+record(ao, "$(P)RE:_OLD_I") {
+    field(DESC, "PID I to restore")
+    field(SCAN, "Passive")
+
+    field(PREC, "1")
+    field(EGU, "")
+}
+
+record(ao, "$(P)RE:_OLD_D") {
+    field(DESC, "PID D to restore")
+    field(SCAN, "Passive")
+
+    field(PREC, "1")
+    field(EGU, "")
+}
