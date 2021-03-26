@@ -372,3 +372,44 @@ record(bo, "$(P)RE:TIMEOUT:ON:SP") {
 
     field(OUT, "$(P)RE:TIMEOUT:ON PP")
 }
+
+# PVs for restoring PIDs post-recondense
+
+record(bo, "$(P)RE:_OLD_ADJUST_PIDS") {
+    field(DESC, "Adjust PIDs from lookup post recondense")
+
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+}
+
+record(bo, "$(P)RE:_OLD_AUTOPID") {
+    field(DESC, "Automatic PID setting to restore")
+    field(SCAN, "Passive")
+
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+}
+
+record(ao, "$(P)RE:_OLD_P") {
+    field(DESC, "PID P to restore")
+    field(SCAN, "Passive")
+
+    field(PREC, "1")
+    field(EGU, "")
+}
+
+record(ao, "$(P)RE:_OLD_I") {
+    field(DESC, "PID I to restore")
+    field(SCAN, "Passive")
+
+    field(PREC, "1")
+    field(EGU, "")
+}
+
+record(ao, "$(P)RE:_OLD_D") {
+    field(DESC, "PID D to restore")
+    field(SCAN, "Passive")
+
+    field(PREC, "1")
+    field(EGU, "")
+}

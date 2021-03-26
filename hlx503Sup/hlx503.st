@@ -37,11 +37,17 @@ PV(float, sorb_temp, "{P}TEMP:SORB", Monitor);
 PV(float, he3pot_temp, "{P}TEMP:HE3POT", Monitor);
 
 // PID PVs
-PV(string, adjust_pids_sp, "{P}ADJUST_PIDS:SP", NoMon);
+PV(string, adjust_pids_sp, "{P}ADJUST_PIDS:SP", Monitor);
 PV(string, autopid, "{P}AUTOPID", Monitor);
-PV(float, p_sp, "{P}P:SP", NoMon);
-PV(float, i_sp, "{P}I:SP", NoMon);
-PV(float, d_sp, "{P}D:SP", NoMon);
+PV(string, autopid_sp, "{P}AUTOPID:SP", Monitor);
+PV(float, p_sp, "{P}P:SP", Monitor);
+PV(float, i_sp, "{P}I:SP", Monitor);
+PV(float, d_sp, "{P}D:SP", Monitor);
+PV(string, old_adjust_pids, "{P}RE:_OLD_ADJUST_PIDS", Monitor);
+PV(string, old_autopid, "{P}RE:_OLD_AUTOPID", Monitor);
+PV(float, old_p, "{P}RE:_OLD_P", Monitor);
+PV(float, old_i, "{P}RE:_OLD_I", Monitor);
+PV(float, old_d, "{P}RE:_OLD_D", Monitor);
 
 // Heater PVs
 PV(int, mode_htr_sp, "{P}MODE:HTR:SP", NoMon);
@@ -97,6 +103,12 @@ ss recondense {
             // Set heater to manual, 0% and temp setpoint to 0K
             PVPUT(mode_htr_sp, 0);
             PVPUT(heater_percent_sp, 0);
+            // Store PID settings to reapply post-recondense
+            PVPUTSTR(old_adjust_pids, adjust_pids_sp);
+            PVPUTSTR(old_autopid, autopid);
+            PVPUT(old_p, p_sp);
+            PVPUT(old_i, i_sp);
+            PVPUT(old_d, d_sp);
             // Use PIDs from PVs not tpar files or autopid
             PVPUTSTR(adjust_pids_sp, "NO");
             PVPUTSTR(autopid, "OFF");
@@ -192,6 +204,12 @@ ss recondense {
                 PVPUT(success, 1);
             }
             PVPUT(temp_he3pot_sp, post_condense_temp_sp);
+            // Reset PID status from pre-recondense
+            PVPUTSTR(adjust_pids_sp, old_adjust_pids);
+            PVPUTSTR(autopid_sp, old_autopid);
+            PVPUT(p_sp, old_p);
+            PVPUT(i_sp, old_i);
+            PVPUT(d_sp, old_d);
         } state not_recondensing
     }
 }
