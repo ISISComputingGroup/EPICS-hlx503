@@ -62,6 +62,15 @@ record(bi, "$(P)RE:SUCCESS") {
     field(UDFS, "NO_ALARM")
 }
 
+record(bi, "$(P)RE:SUCCESS:_PART") {
+    field(DESC, "Was last recondense part successful")
+
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+
+    field(UDFS, "NO_ALARM")
+}
+
 record(bo, "$(P)RE:SKIPPED:SP") {
     field(DESC, "Set if the recondense part was skipped")
 
