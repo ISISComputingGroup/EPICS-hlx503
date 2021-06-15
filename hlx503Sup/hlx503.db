@@ -185,8 +185,6 @@ record(stringout, "$(P)_PID_FILE:SP")
 record(scalcout, "$(P)_PUSH_PID_FILE:SP")
 {
     field(DESC, "Select PID file based on ctrl chan")
-    field(PINI, "YES")
-
     field(INAA, "$(P)HE3POT:PID_FILE CP")
     field(INBB, "$(P)SORB:PID_FILE CP")
     field(INPA, "$(P)CTRLCHANNEL:SP CP")
