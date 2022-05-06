@@ -26,7 +26,8 @@ record(calc, "$(P)TEMP:HE3POT") {
     field(INPA, "$(P)TEMP:HE3POTHI")
     field(INPB, "$(P)TEMP:1KPOTHE3POTLO")
     field(INPC, "$(P)TEMP:HE3POT:SP")
-    field(CALC, "C > $(MAX_TEMP_FOR_HE3_COOLING) ? A : B")
+    field(INPD, "$(P)MAX_TEMP_FOR_HE3_COOLING CP")
+    field(CALC, "C > D ? A : B")
 
     field(PREC, "4")
     field(EGU, "K")
@@ -74,8 +75,9 @@ record(scalcout, "$(P)TEMP:HE3POT:_CTRLCHANNEL") {
     field(DESC, "Channel to use for He3 Pot")
     field(SCAN, "Passive")
 
-    field(INPC, "$(P)TEMP:HE3POT:SP")
-    field(CALC, "C > $(MAX_TEMP_FOR_HE3_COOLING) ? 'HE3POTHI' : '1KPOTHE3POTLO'")
+    field(INPA, "$(P)TEMP:HE3POT:SP")
+    field(INPB, "$(P)MAX_TEMP_FOR_HE3_COOLING CP")
+    field(CALC, "A > B ? 'HE3POTHI' : '1KPOTHE3POTLO'")
     field(OUT, "$(P)CTRLCHANNEL:SP PP")
 }
 
@@ -282,5 +284,22 @@ record(ao, "$(P)_D:SP")
     field(OMSL, "closed_loop")
     field(OIF, "Full")
     field(OUT, "$(P)D:SP PP")
+}
+
+record(ao, "$(P)MAX_TEMP_FOR_HE3_COOLING:SP") {
+    field(DESC, "Max temperature to use He3 cooling with")
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+    field(VAL, "$(MAX_TEMP_FOR_HE3_COOLING)")
+    field(OUT, "$(P)MAX_TEMP_FOR_HE3_COOLING PP")
+    field(UDFS, "NO_ALARM")
+}
+
+record(ai, "$(P)MAX_TEMP_FOR_HE3_COOLING") {
+    field(DESC, "Max temperature to use He3 cooling with")
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+    field(VAL, "$(MAX_TEMP_FOR_HE3_COOLING)")
+    field(UDFS, "NO_ALARM")
 }
 
