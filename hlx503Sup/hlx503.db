@@ -306,6 +306,7 @@ record(ao, "$(P)MAX_TEMP_FOR_HE3_COOLING:SP") {
     field(VAL, "$(MAX_TEMP_FOR_HE3_COOLING)")
     field(OUT, "$(P)MAX_TEMP_FOR_HE3_COOLING PP")
     field(UDFS, "NO_ALARM")
+    field(PREC, "3")
 }
 
 record(ai, "$(P)MAX_TEMP_FOR_HE3_COOLING") {
@@ -314,5 +315,6 @@ record(ai, "$(P)MAX_TEMP_FOR_HE3_COOLING") {
     field(DTYP, "Soft Channel")
     field(VAL, "$(MAX_TEMP_FOR_HE3_COOLING)")
     field(UDFS, "NO_ALARM")
+    field(PREC, "3")
 }
 
