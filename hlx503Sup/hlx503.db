@@ -62,17 +62,25 @@ record(seq, "$(P)TEMP:HE3POT:SP:_SEQ") {
 
     field(DESC, "Sequence setpoint actions")
 
+    
+    # If you switch channel you need to turn the heater off first - the ITC does not allow otherwise
+    # TODO we should check whether this is correct or whether we should only turn it off when the sensor needs to change
     field(DOL1, "1")
-    field(LNK1, "$(P)TEMP:HE3POT:_CTRLCHANNEL PP")
+    field(LNK1, "$(P)HEATER:OFF PP")
 
-    field(DO2, "1")
-    field(LNK2, "$(P)MODE:HTR:SP PP")
+    field(DOL2, "1")
+    field(LNK2, "$(P)TEMP:HE3POT:_CTRLCHANNEL PP")
     field(DLY2, "0.1")
 
-    # Wait for control channel (and if ADJUST_PIDS is YES then PID_FILE) to be set
-    field(DOL3, "$(P)TEMP:HE3POT:SP")
-    field(LNK3, "$(P)TEMP:SP PP")
+                                                                                  
+    field(DO3, "1")
+    field(LNK3, "$(P)MODE:HTR:SP PP")
     field(DLY3, "0.1")
+
+    # Wait for control channel (and if ADJUST_PIDS is YES then PID_FILE) to be set
+    field(DOL4, "$(P)TEMP:HE3POT:SP")
+    field(LNK4, "$(P)TEMP:SP PP")
+    field(DLY4, "0.1")
 }
 
 record(scalcout, "$(P)TEMP:HE3POT:_CTRLCHANNEL") {
