@@ -62,13 +62,17 @@ record(seq, "$(P)TEMP:HE3POT:SP:_SEQ") {
 
     field(DESC, "Sequence setpoint actions")
 
-    field(DOL0, "1")
-    field(LNK0, "$(P)TEMP:HE3POT:_CTRLCHANNEL PP")
+    field(DOL1, "1")
+    field(LNK1, "$(P)TEMP:HE3POT:_CTRLCHANNEL PP")
+
+    field(DO2, "1")
+    field(LNK2, "$(P)MODE:HTR:SP PP")
+    field(DLY2, "0.1")
 
     # Wait for control channel (and if ADJUST_PIDS is YES then PID_FILE) to be set
-    field(DOL1, "$(P)TEMP:HE3POT:SP")
-    field(LNK1, "$(P)TEMP:SP PP")
-    field(DLY1, "0.1")
+    field(DOL3, "$(P)TEMP:HE3POT:SP")
+    field(LNK3, "$(P)TEMP:SP PP")
+    field(DLY3, "0.1")
 }
 
 record(scalcout, "$(P)TEMP:HE3POT:_CTRLCHANNEL") {
@@ -112,11 +116,12 @@ record(sseq, "$(P)TEMP:SORB:SP:_SEQ") {
 record(sseq, "$(P)HEATER:OFF") {
     field(DESC, "Turn the heater off")
 
-    field(STR1, "Manual")
-    field(LNK1, "$(P)MODE:HTR:SP PP")
+    field(DO1, "0")
+    field(LNK1, "$(P)MODE:HTR:SP PP MS")
 
     field(DO2, "0.0")
     field(LNK2, "$(P)HEATERP:SP PP")
+    field(DLY2, "0.5")
 
     field(STAT, "NO_ALARM")
 }
