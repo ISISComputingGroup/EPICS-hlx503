@@ -62,12 +62,6 @@ record(seq, "$(P)TEMP:HE3POT:SP:_SEQ") {
 
     field(DESC, "Sequence setpoint actions")
 
-    
-    # If you switch channel you need to turn the heater off first - the ITC does not allow otherwise
-    # TODO we should check whether this is correct or whether we should only turn it off when the sensor needs to change
-    field(DOL1, "1")
-    field(LNK1, "$(P)HEATER:OFF PP")
-
     field(DOL2, "1")
     field(LNK2, "$(P)TEMP:HE3POT:_CTRLCHANNEL PP")
     field(DLY2, "0.1")
@@ -90,7 +84,26 @@ record(scalcout, "$(P)TEMP:HE3POT:_CTRLCHANNEL") {
     field(INPA, "$(P)TEMP:HE3POT:SP")
     field(INPB, "$(P)MAX_TEMP_FOR_HE3_COOLING CP")
     field(CALC, "A > B ? 'HE3POTHI' : '1KPOTHE3POTLO'")
-    field(OUT, "$(P)CTRLCHANNEL:SP PP")
+    field(OOPT, "On Change")
+    field(OUT, "$(P)SWITCH_CTRL_CHANNEL:SP CP")
+}
+
+record(ao, "$(P)SWITCH_CTRL_CHANNEL:SP") {
+    field(DESC, "Channel to switch to")
+    field(SCAN, "Passive")
+    field(FLNK, "$(P)SWITCH_CTRL_CHANNEL")
+}
+
+record(sseq, "$(P)SWITCH_CTRL_CHANNEL") {
+    field(DESC, "Turn off heater then switch ctrl channel")
+    # If you switch channel you need to turn the heater off first - the ITC does not allow otherwise
+
+    field(DOL1, "1")
+    field(LNK1, "$(P)HEATER:OFF PP")
+
+    field(DOL2, "$(P)SWITCH_CTRL_CHANNEL:SP")
+    field(LNK2, "$(P)CTRLCHANNEL:SP PP")
+    field(DLY2, "0.1")
 }
 
 ## Temperature for the SORB
