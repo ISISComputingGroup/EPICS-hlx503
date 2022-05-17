@@ -35,6 +35,8 @@ PV(float, temp_sorb_sp, "{P}TEMP:SORB:SP", NoMon);
 PV(float, temp_sp, "{P}TEMP:SP", Monitor);
 PV(float, sorb_temp, "{P}TEMP:SORB", Monitor);
 PV(float, he3pot_temp, "{P}TEMP:HE3POT", Monitor);
+PV(float, he3pot_temp_hi, "{P}TEMP:HE3POTHI", Monitor);
+
 
 // PID PVs
 PV(string, adjust_pids_sp, "{P}ADJUST_PIDS:SP", Monitor);
@@ -111,17 +113,19 @@ ss recondense {
             PVPUT(old_d, d_sp);
             // Use PIDs from PVs not tpar files or autopid
             PVPUTSTR(adjust_pids_sp, "NO");
-            PVPUTSTR(autopid, "OFF");
+            PVPUTSTR(autopid_sp, "OFF");
             PVPUT(p_sp, recondense_sorb_p);
             PVPUT(i_sp, recondense_sorb_i);
             PVPUT(d_sp, recondense_sorb_d);
             // Set control channel, temperature and PIDs
             PVPUT(temp_sorb_sp, recondense_sorb_temp_sp);
+            PVPUT(heater_percent_sp, 0);
+            PVPUT(mode_htr_sp, 1);
         }
         when (skipped_sp == 1) {
             PVPUT(part_success, 0);
             PVPUT(skipped, 1);
-        } state part2
+        } state part2_wait
         when (cancelled_sp == 1) {
             PVPUT(part_success, 0);
             PVPUT(success, 0);
@@ -131,9 +135,9 @@ ss recondense {
             PVPUT(part_success, 0);
             PVPUT(timed_out, 1);
         } state finish
-        when(sorb_temp > (recondense_sorb_temp_sp - 0.5) || he3pot_temp < he3pot_target_part1) {
+        when(sorb_temp > (recondense_sorb_temp_sp - 0.5) && he3pot_temp_hi < he3pot_target_part1) {
             PVPUT(part_success, 1);
-        } state part2
+        } state part2_wait
     }
 
     state part2 {
@@ -155,7 +159,7 @@ ss recondense {
             PVPUT(part_success, 0);
             PVPUT(timed_out, 1);
         } state finish
-        when(sorb_temp > (recondense_sorb_temp_sp - 0.5) || he3pot_temp < he3pot_target_part2) {
+        when(sorb_temp > (recondense_sorb_temp_sp - 0.5) && he3pot_temp < he3pot_target_part2) {
             // Part success will remain true if it was set to true in part 1
         } state part2_wait
     }
