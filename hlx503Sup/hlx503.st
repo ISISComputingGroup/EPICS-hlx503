@@ -81,6 +81,7 @@ ss recondense {
     state not_recondensing {
         entry {
             // Set status that we are not recondensing 
+            PVPUT(heater_off, 1);
             PVPUT(recondensing_sp, 0);
             PVPUT(recondensing, 0);
             PVPUTSTR(part, "NOT RECONDENSING");
@@ -140,30 +141,6 @@ ss recondense {
         } state finish
         when(sorb_temp > (recondense_sorb_temp_sp - 0.5) && he3pot_temp_hi < he3pot_target_part1) {
             PVPUT(part_success, 1);
-        } state part2_wait
-    }
-
-    state part2 {
-        entry {
-            PVPUT(skipped_sp, 0);
-            PVPUT(skipped, 0);
-            PVPUTSTR(part, "PART 2");
-        }
-        when (skipped_sp == 1) {
-            PVPUT(part_success, 0);
-            PVPUT(skipped, 1);
-        } state part3
-        when (cancelled_sp == 1) {
-            PVPUT(part_success, 0);
-            PVPUT(success, 0);
-            PVPUT(cancelled, 1);
-        } state not_recondensing
-        when(timeout_on == 1 && delay(timeout)) {
-            PVPUT(part_success, 0);
-            PVPUT(timed_out, 1);
-        } state finish
-        when(sorb_temp > (recondense_sorb_temp_sp - 0.5) && he3pot_temp < he3pot_target_part2) {
-            // Part success will remain true if it was set to true in part 1
         } state part2_wait
     }
 
