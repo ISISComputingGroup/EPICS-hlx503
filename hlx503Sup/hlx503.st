@@ -54,6 +54,7 @@ PV(float, old_d, "{P}RE:_OLD_D", Monitor);
 // Heater PVs
 PV(int, mode_htr_sp, "{P}MODE:HTR:SP", NoMon);
 PV(float, heater_percent_sp, "{P}HEATERP:SP", NoMon);
+PV(int, heater_off, "{P}HEATER:OFF", NoMon);
 
 // Control channel PVs
 PV(string, ctrlchannel, "{P}CTRLCHANNEL", Monitor);
@@ -102,9 +103,8 @@ ss recondense {
             PVPUT(part_success, 0);
             // Set status that we are on part 1 of a recondense
             PVPUTSTR(part, "PART 1");
-            // Set heater to manual, 0% and temp setpoint to 0K
-            PVPUT(mode_htr_sp, 0);
-            PVPUT(heater_percent_sp, 0);
+            // Set heater to manual, 0% and temp setpoint to 0K TODO check this 
+            PVPUT(heater_off, 1);
             // Store PID settings to reapply post-recondense
             PVPUTSTR(old_adjust_pids, adjust_pids_sp);
             PVPUTSTR(old_autopid, autopid);
@@ -114,13 +114,16 @@ ss recondense {
             // Use PIDs from PVs not tpar files or autopid
             PVPUTSTR(adjust_pids_sp, "NO");
             PVPUTSTR(autopid_sp, "OFF");
+            // Set control channel, temperature and PIDs
+            PVPUTSTR(ctrlchannel_sp, "SORB");
+            PVPUT(temp_sorb_sp, recondense_sorb_temp_sp);
             PVPUT(p_sp, recondense_sorb_p);
             PVPUT(i_sp, recondense_sorb_i);
             PVPUT(d_sp, recondense_sorb_d);
-            // Set control channel, temperature and PIDs
-            PVPUT(temp_sorb_sp, recondense_sorb_temp_sp);
-            PVPUT(heater_percent_sp, 0);
+            // Set to heater auto
+            PVPUT(heater_off, 1);
             PVPUT(mode_htr_sp, 1);
+
         }
         when (skipped_sp == 1) {
             PVPUT(part_success, 0);
