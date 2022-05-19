@@ -116,15 +116,13 @@ ss recondense {
             PVPUTSTR(adjust_pids_sp, "NO");
             PVPUTSTR(autopid_sp, "OFF");
             // Set control channel, temperature and PIDs
-            PVPUTSTR(ctrlchannel_sp, "SORB");
-            PVPUT(temp_sorb_sp, recondense_sorb_temp_sp);
             PVPUT(p_sp, recondense_sorb_p);
             PVPUT(i_sp, recondense_sorb_i);
             PVPUT(d_sp, recondense_sorb_d);
             // Set to heater auto
-            PVPUT(heater_off, 1);
+            PVPUTSTR(ctrlchannel_sp, "SORB");
+            PVPUT(temp_sorb_sp, recondense_sorb_temp_sp);
             PVPUT(mode_htr_sp, 1);
-
         }
         when (skipped_sp == 1) {
             PVPUT(part_success, 0);
