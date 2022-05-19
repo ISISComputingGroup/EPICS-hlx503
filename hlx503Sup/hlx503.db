@@ -25,9 +25,8 @@ record(calc, "$(P)TEMP:HE3POT") {
 
     field(INPA, "$(P)TEMP:HE3POTHI")
     field(INPB, "$(P)TEMP:1KPOTHE3POTLO")
-    field(INPC, "$(P)TEMP:HE3POT:SP")
-    field(INPD, "$(P)MAX_TEMP_FOR_HE3_COOLING CP")
-    field(CALC, "C > D ? A : B")
+    field(INPC, "$(P)MAX_TEMP_FOR_HE3_COOLING CP")
+    field(CALC, "B > C ? A : B")
 
     field(PREC, "4")
     field(EGU, "K")
@@ -62,13 +61,18 @@ record(seq, "$(P)TEMP:HE3POT:SP:_SEQ") {
 
     field(DESC, "Sequence setpoint actions")
 
-    field(DOL0, "1")
-    field(LNK0, "$(P)TEMP:HE3POT:_CTRLCHANNEL PP")
+    field(DOL1, "1")
+    field(LNK1, "$(P)TEMP:HE3POT:_CTRLCHANNEL PP")
+    field(DLY1, "0.1")
+  
+    field(DO2, "1")
+    field(LNK2, "$(P)MODE:HTR:SP PP")
+    field(DLY2, "0.5")
 
     # Wait for control channel (and if ADJUST_PIDS is YES then PID_FILE) to be set
-    field(DOL1, "$(P)TEMP:HE3POT:SP")
-    field(LNK1, "$(P)TEMP:SP PP")
-    field(DLY1, "0.1")
+    field(DOL3, "$(P)TEMP:HE3POT:SP")
+    field(LNK3, "$(P)TEMP:SP PP")
+    field(DLY3, "0.5")
 }
 
 record(scalcout, "$(P)TEMP:HE3POT:_CTRLCHANNEL") {
@@ -78,7 +82,26 @@ record(scalcout, "$(P)TEMP:HE3POT:_CTRLCHANNEL") {
     field(INPA, "$(P)TEMP:HE3POT:SP")
     field(INPB, "$(P)MAX_TEMP_FOR_HE3_COOLING CP")
     field(CALC, "A > B ? 'HE3POTHI' : '1KPOTHE3POTLO'")
-    field(OUT, "$(P)CTRLCHANNEL:SP PP")
+    #field(OOPT, "On Change")
+    field(OUT, "$(P)SWITCH_CTRL_CHANNEL:SP CP")
+}
+
+record(stringin, "$(P)SWITCH_CTRL_CHANNEL:SP") {
+    field(DESC, "Channel to switch to")
+    field(SCAN, "Passive")
+    field(FLNK, "$(P)SWITCH_CTRL_CHANNEL")
+}
+
+record(sseq, "$(P)SWITCH_CTRL_CHANNEL") {
+    field(DESC, "Turn off heater then switch ctrl channel")
+    # If you switch channel you need to turn the heater off first - the ITC does not allow otherwise
+
+    field(DOL1, "1")
+    field(LNK1, "$(P)HEATER:OFF PP")
+
+    field(DOL2, "$(P)SWITCH_CTRL_CHANNEL:SP")
+    field(LNK2, "$(P)CTRLCHANNEL:SP PP")
+    field(DLY2, "0.3")
 }
 
 ## Temperature for the SORB
@@ -99,24 +122,33 @@ record(sseq, "$(P)TEMP:SORB:SP:_SEQ") {
 
     # Control heater output based on sorb sensor
     field(STR1, "SORB")
-    field(LNK1, "$(P)CTRLCHANNEL:SP PP")
+    field(LNK1, "$(P)SWITCH_CTRL_CHANNEL:SP PP")
+    field(DLY1, "0.5")
+
+    field(DO2, "1")
+    field(LNK2, "$(P)MODE:HTR:SP PP")
+    field(DLY2, "0.5")
 
     # Wait for control channel (and if ADJUST_PIDS is YES then PID_FILE) to be set
-    field(DOL2, "$(P)TEMP:SORB:SP")
-    field(LNK2, "$(P)TEMP:SP PP")
-    field(DLY2, "0.1")
+    field(DOL3, "$(P)TEMP:SORB:SP")
+    field(LNK3, "$(P)TEMP:SP PP")
+    field(DLY3, "0.5")
 }
 
 ## Turn heater off
 
 record(sseq, "$(P)HEATER:OFF") {
     field(DESC, "Turn the heater off")
+    field(DO1, "0.0")
+    field(LNK1, "$(P)TEMP:SP PP")
 
-    field(STR1, "Manual")
-    field(LNK1, "$(P)MODE:HTR:SP PP")
+    field(DO2, "0")
+    field(LNK2, "$(P)MODE:HTR:SP PP")
+    field(DLY2, "0.1")
 
-    field(DO2, "0.0")
-    field(LNK2, "$(P)HEATERP:SP PP")
+    field(DO3, "0.0")
+    field(LNK3, "$(P)HEATERP:SP PP")
+    field(DLY3, "0.1")
 
     field(STAT, "NO_ALARM")
 }
@@ -293,6 +325,7 @@ record(ao, "$(P)MAX_TEMP_FOR_HE3_COOLING:SP") {
     field(VAL, "$(MAX_TEMP_FOR_HE3_COOLING)")
     field(OUT, "$(P)MAX_TEMP_FOR_HE3_COOLING PP")
     field(UDFS, "NO_ALARM")
+    field(PREC, "3")
 }
 
 record(ai, "$(P)MAX_TEMP_FOR_HE3_COOLING") {
@@ -301,5 +334,6 @@ record(ai, "$(P)MAX_TEMP_FOR_HE3_COOLING") {
     field(DTYP, "Soft Channel")
     field(VAL, "$(MAX_TEMP_FOR_HE3_COOLING)")
     field(UDFS, "NO_ALARM")
+    field(PREC, "3")
 }
 

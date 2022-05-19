@@ -35,6 +35,8 @@ PV(float, temp_sorb_sp, "{P}TEMP:SORB:SP", NoMon);
 PV(float, temp_sp, "{P}TEMP:SP", Monitor);
 PV(float, sorb_temp, "{P}TEMP:SORB", Monitor);
 PV(float, he3pot_temp, "{P}TEMP:HE3POT", Monitor);
+PV(float, he3pot_temp_hi, "{P}TEMP:HE3POTHI", Monitor);
+
 
 // PID PVs
 PV(string, adjust_pids_sp, "{P}ADJUST_PIDS:SP", Monitor);
@@ -52,6 +54,7 @@ PV(float, old_d, "{P}RE:_OLD_D", Monitor);
 // Heater PVs
 PV(int, mode_htr_sp, "{P}MODE:HTR:SP", NoMon);
 PV(float, heater_percent_sp, "{P}HEATERP:SP", NoMon);
+PV(int, heater_off, "{P}HEATER:OFF", NoMon);
 
 // Control channel PVs
 PV(string, ctrlchannel, "{P}CTRLCHANNEL", Monitor);
@@ -78,6 +81,7 @@ ss recondense {
     state not_recondensing {
         entry {
             // Set status that we are not recondensing 
+            PVPUT(temp_sp, 0.0);
             PVPUT(recondensing_sp, 0);
             PVPUT(recondensing, 0);
             PVPUTSTR(part, "NOT RECONDENSING");
@@ -100,9 +104,8 @@ ss recondense {
             PVPUT(part_success, 0);
             // Set status that we are on part 1 of a recondense
             PVPUTSTR(part, "PART 1");
-            // Set heater to manual, 0% and temp setpoint to 0K
-            PVPUT(mode_htr_sp, 0);
-            PVPUT(heater_percent_sp, 0);
+            // Set heater to manual, 0% and temp setpoint to 0K TODO check this 
+            PVPUT(heater_off, 1);
             // Store PID settings to reapply post-recondense
             PVPUTSTR(old_adjust_pids, adjust_pids_sp);
             PVPUTSTR(old_autopid, autopid);
@@ -111,17 +114,18 @@ ss recondense {
             PVPUT(old_d, d_sp);
             // Use PIDs from PVs not tpar files or autopid
             PVPUTSTR(adjust_pids_sp, "NO");
-            PVPUTSTR(autopid, "OFF");
+            PVPUTSTR(autopid_sp, "OFF");
+            // Set PIDs
             PVPUT(p_sp, recondense_sorb_p);
             PVPUT(i_sp, recondense_sorb_i);
             PVPUT(d_sp, recondense_sorb_d);
-            // Set control channel, temperature and PIDs
+            // Set temperature then heater mode to auto
             PVPUT(temp_sorb_sp, recondense_sorb_temp_sp);
         }
         when (skipped_sp == 1) {
             PVPUT(part_success, 0);
             PVPUT(skipped, 1);
-        } state part2
+        } state part2_wait
         when (cancelled_sp == 1) {
             PVPUT(part_success, 0);
             PVPUT(success, 0);
@@ -131,32 +135,8 @@ ss recondense {
             PVPUT(part_success, 0);
             PVPUT(timed_out, 1);
         } state finish
-        when(sorb_temp > (recondense_sorb_temp_sp - 0.5) || he3pot_temp < he3pot_target_part1) {
+        when(sorb_temp > (recondense_sorb_temp_sp - 0.5) && he3pot_temp_hi < he3pot_target_part1) {
             PVPUT(part_success, 1);
-        } state part2
-    }
-
-    state part2 {
-        entry {
-            PVPUT(skipped_sp, 0);
-            PVPUT(skipped, 0);
-            PVPUTSTR(part, "PART 2");
-        }
-        when (skipped_sp == 1) {
-            PVPUT(part_success, 0);
-            PVPUT(skipped, 1);
-        } state part3
-        when (cancelled_sp == 1) {
-            PVPUT(part_success, 0);
-            PVPUT(success, 0);
-            PVPUT(cancelled, 1);
-        } state not_recondensing
-        when(timeout_on == 1 && delay(timeout)) {
-            PVPUT(part_success, 0);
-            PVPUT(timed_out, 1);
-        } state finish
-        when(sorb_temp > (recondense_sorb_temp_sp - 0.5) || he3pot_temp < he3pot_target_part2) {
-            // Part success will remain true if it was set to true in part 1
         } state part2_wait
     }
 
@@ -169,8 +149,6 @@ ss recondense {
             PVPUT(skipped_sp, 0);
             PVPUT(skipped, 0);
             PVPUTSTR(part, "PART 3");
-            PVPUTSTR(ctrlchannel_sp, "SORB");
-            PVPUT(heater_percent_sp, 0);
             PVPUT(temp_sorb_sp, 0);
         }
         when (skipped_sp == 1) {
