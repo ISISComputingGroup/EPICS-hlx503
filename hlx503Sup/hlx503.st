@@ -121,7 +121,6 @@ ss recondense {
             PVPUT(d_sp, recondense_sorb_d);
             // Set temperature then heater mode to auto
             PVPUT(temp_sorb_sp, recondense_sorb_temp_sp);
-            PVPUT(mode_htr_sp, 1);
         }
         when (skipped_sp == 1) {
             PVPUT(part_success, 0);
@@ -150,8 +149,6 @@ ss recondense {
             PVPUT(skipped_sp, 0);
             PVPUT(skipped, 0);
             PVPUTSTR(part, "PART 3");
-            PVPUTSTR(ctrlchannel_sp, "SORB");
-            PVPUT(heater_percent_sp, 0);
             PVPUT(temp_sorb_sp, 0);
         }
         when (skipped_sp == 1) {

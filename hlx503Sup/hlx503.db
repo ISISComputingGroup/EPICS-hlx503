@@ -67,12 +67,12 @@ record(seq, "$(P)TEMP:HE3POT:SP:_SEQ") {
   
     field(DO2, "1")
     field(LNK2, "$(P)MODE:HTR:SP PP")
-    field(DLY2, "0.1")
+    field(DLY2, "0.5")
 
     # Wait for control channel (and if ADJUST_PIDS is YES then PID_FILE) to be set
     field(DOL3, "$(P)TEMP:HE3POT:SP")
     field(LNK3, "$(P)TEMP:SP PP")
-    field(DLY3, "0.1")
+    field(DLY3, "0.5")
 }
 
 record(scalcout, "$(P)TEMP:HE3POT:_CTRLCHANNEL") {
@@ -101,7 +101,7 @@ record(sseq, "$(P)SWITCH_CTRL_CHANNEL") {
 
     field(DOL2, "$(P)SWITCH_CTRL_CHANNEL:SP")
     field(LNK2, "$(P)CTRLCHANNEL:SP PP")
-    field(DLY2, "0.1")
+    field(DLY2, "0.3")
 }
 
 ## Temperature for the SORB
@@ -122,12 +122,17 @@ record(sseq, "$(P)TEMP:SORB:SP:_SEQ") {
 
     # Control heater output based on sorb sensor
     field(STR1, "SORB")
-    field(LNK1, "$(P)CTRLCHANNEL:SP PP")
+    field(LNK1, "$(P)SWITCH_CTRL_CHANNEL:SP PP")
+    field(DLY1, "0.5")
+
+    field(DO2, "1")
+    field(LNK2, "$(P)MODE:HTR:SP PP")
+    field(DLY2, "0.5")
 
     # Wait for control channel (and if ADJUST_PIDS is YES then PID_FILE) to be set
-    field(DOL2, "$(P)TEMP:SORB:SP")
-    field(LNK2, "$(P)TEMP:SP PP")
-    field(DLY2, "0.1")
+    field(DOL3, "$(P)TEMP:SORB:SP")
+    field(LNK3, "$(P)TEMP:SP PP")
+    field(DLY3, "0.5")
 }
 
 ## Turn heater off
