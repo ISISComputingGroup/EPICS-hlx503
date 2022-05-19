@@ -25,9 +25,8 @@ record(calc, "$(P)TEMP:HE3POT") {
 
     field(INPA, "$(P)TEMP:HE3POTHI")
     field(INPB, "$(P)TEMP:1KPOTHE3POTLO")
-    field(INPC, "$(P)TEMP:HE3POT:SP")
-    field(INPD, "$(P)MAX_TEMP_FOR_HE3_COOLING CP")
-    field(CALC, "C > D ? A : B")
+    field(INPC, "$(P)MAX_TEMP_FOR_HE3_COOLING CP")
+    field(CALC, "B > C ? A : B")
 
     field(PREC, "4")
     field(EGU, "K")
