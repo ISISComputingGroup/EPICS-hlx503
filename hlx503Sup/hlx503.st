@@ -81,7 +81,7 @@ ss recondense {
     state not_recondensing {
         entry {
             // Set status that we are not recondensing 
-            PVPUT(heater_off, 1);
+            PVPUT(temp_sp, 0.0);
             PVPUT(recondensing_sp, 0);
             PVPUT(recondensing, 0);
             PVPUTSTR(part, "NOT RECONDENSING");
@@ -115,12 +115,11 @@ ss recondense {
             // Use PIDs from PVs not tpar files or autopid
             PVPUTSTR(adjust_pids_sp, "NO");
             PVPUTSTR(autopid_sp, "OFF");
-            // Set control channel, temperature and PIDs
+            // Set PIDs
             PVPUT(p_sp, recondense_sorb_p);
             PVPUT(i_sp, recondense_sorb_i);
             PVPUT(d_sp, recondense_sorb_d);
-            // Set to heater auto
-            PVPUTSTR(ctrlchannel_sp, "SORB");
+            // Set temperature then heater mode to auto
             PVPUT(temp_sorb_sp, recondense_sorb_temp_sp);
             PVPUT(mode_htr_sp, 1);
         }
