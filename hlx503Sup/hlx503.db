@@ -82,7 +82,7 @@ record(scalcout, "$(P)TEMP:HE3POT:_CTRLCHANNEL") {
     field(INPA, "$(P)TEMP:HE3POT:SP")
     field(INPB, "$(P)MAX_TEMP_FOR_HE3_COOLING CP")
     field(CALC, "A > B ? 'HE3POTHI' : '1KPOTHE3POTLO'")
-    #field(OOPT, "On Change")
+    field(OOPT, "On Change")
     field(OUT, "$(P)SWITCH_CTRL_CHANNEL:SP CP")
 }
 
