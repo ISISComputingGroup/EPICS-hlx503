@@ -25,7 +25,7 @@ record(calc, "$(P)TEMP:HE3POT") {
 
     field(INPA, "$(P)TEMP:HE3POTHI")
     field(INPB, "$(P)TEMP:1KPOTHE3POTLO")
-    field(INPC, "$(P)MAX_TEMP_FOR_HE3_COOLING CP")
+    field(INPC, "$(P)SENSOR_SWITCHING_THRESHOLD CP")
     field(CALC, "B > C ? A : B")
 
     field(PREC, "4")
@@ -116,6 +116,7 @@ record(ao, "$(P)TEMP:SORB:SP") {
     field(PREC, "4")
     field(EGU, "K")
 }
+
 
 record(sseq, "$(P)TEMP:SORB:SP:_SEQ") {
     field(DESC, "Sequence setpoint actions")
@@ -333,6 +334,25 @@ record(ai, "$(P)MAX_TEMP_FOR_HE3_COOLING") {
     field(SCAN, "Passive")
     field(DTYP, "Soft Channel")
     field(VAL, "$(MAX_TEMP_FOR_HE3_COOLING)")
+    field(UDFS, "NO_ALARM")
+    field(PREC, "3")
+}
+
+record(ao, "$(P)SENSOR_SWITCHING_THRESHOLD:SP") {
+    field(DESC, "Switching thrshld for temp rbv")
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+    field(VAL, "$(SENSOR_SWITCHING_THRESHOLD)")
+    field(OUT, "$(P)SENSOR_SWITCHING_THRESHOLD PP")
+    field(UDFS, "NO_ALARM")
+    field(PREC, "3")
+}
+
+record(ai, "$(P)SENSOR_SWITCHING_THRESHOLD") {
+    field(DESC, "Switching thrshld for temp rbv")
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+    field(VAL, "$(SENSOR_SWITCHING_THRESHOLD)")
     field(UDFS, "NO_ALARM")
     field(PREC, "3")
 }
