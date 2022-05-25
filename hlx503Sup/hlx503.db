@@ -78,18 +78,26 @@ record(seq, "$(P)TEMP:HE3POT:SP:_SEQ") {
 record(scalcout, "$(P)TEMP:HE3POT:_CTRLCHANNEL") {
     field(DESC, "Channel to use for He3 Pot")
     field(SCAN, "Passive")
-
     field(INPA, "$(P)TEMP:HE3POT:SP")
     field(INPB, "$(P)MAX_TEMP_FOR_HE3_COOLING CP")
     field(CALC, "A > B ? 'HE3POTHI' : '1KPOTHE3POTLO'")
-    field(OOPT, "On Change")
-    field(OUT, "$(P)SWITCH_CTRL_CHANNEL:SP CP")
+    field(OUT, "$(P)SWITCH_CTRL_CHANNEL:SP PP")
 }
 
-record(stringin, "$(P)SWITCH_CTRL_CHANNEL:SP") {
+record(stringout, "$(P)SWITCH_CTRL_CHANNEL:SP") 
+{
     field(DESC, "Channel to switch to")
     field(SCAN, "Passive")
-    field(FLNK, "$(P)SWITCH_CTRL_CHANNEL")
+	field(FLNK, "$(P)SWITCH_CTRL_CHANNEL:SP:_CALC")
+}
+
+record(scalcout, "$(P)SWITCH_CTRL_CHANNEL:SP:_CALC") {
+    field(DESC, "Channel to switch to only if changed")
+    field(SCAN, "Passive")
+	field(INAA, "$(P)SWITCH_CTRL_CHANNEL:SP")
+	field(CALC, "AA")
+	field(OOPT, "On Change")
+    field(OUT, "$(P)SWITCH_CTRL_CHANNEL PP")
 }
 
 record(sseq, "$(P)SWITCH_CTRL_CHANNEL") {
