@@ -81,6 +81,7 @@ ss recondense {
     state not_recondensing {
         entry {
             // Set status that we are not recondensing 
+            PVPUT(heater_off, 1);
             PVPUT(temp_sp, 0.0);
             PVPUT(recondensing_sp, 0);
             PVPUT(recondensing, 0);
@@ -104,7 +105,7 @@ ss recondense {
             PVPUT(part_success, 0);
             // Set status that we are on part 1 of a recondense
             PVPUTSTR(part, "PART 1");
-            // Set heater to manual, 0% and temp setpoint to 0K TODO check this 
+            // Set heater to manual, 0%
             PVPUT(heater_off, 1);
             // Store PID settings to reapply post-recondense
             PVPUTSTR(old_adjust_pids, adjust_pids_sp);
@@ -120,6 +121,7 @@ ss recondense {
             PVPUT(i_sp, recondense_sorb_i);
             PVPUT(d_sp, recondense_sorb_d);
             // Set temperature then heater mode to auto
+	    PVPUT(heater_off, 1);
             PVPUT(temp_sorb_sp, recondense_sorb_temp_sp);
         }
         when (skipped_sp == 1) {
