@@ -1,6 +1,6 @@
 program hlx503 ("P")
 
-#include "seqPVmacros.h"
+#include "ibexSeqPVmacros.h"
 
 // Recondense status PVs
 PV(int, recondensing_sp, "{P}RECONDENSING:SP", Monitor);
