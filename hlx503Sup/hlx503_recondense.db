@@ -315,7 +315,7 @@ record(longout, "$(P)RE:PART2:WAIT_TIME:SP") {
 
     field(VAL, "$(RECONDENSE_POST_PART2_WAIT_TIME)")
 
-    field(EGU, "seconds")
+    field(EGU, "s")
 
     field(OUT, "$(P)RE:PART2:WAIT_TIME PP")
 }
@@ -326,7 +326,7 @@ record(longin, "$(P)RE:PART2:WAIT_TIME") {
 
     field(VAL, "$(RECONDENSE_POST_PART2_WAIT_TIME)")
 
-    field(EGU, "seconds")
+    field(EGU, "s")
 }
 
 ## Timeout control
@@ -337,7 +337,7 @@ record(longin, "$(P)RE:TIMEOUT") {
 
     field(VAL, "$(RECONDENSE_PART_TIMEOUT)")
 
-    field(EGU, "seconds")
+    field(EGU, "s")
 }
 
 record(longout, "$(P)RE:TIMEOUT:SP") {
@@ -346,7 +346,7 @@ record(longout, "$(P)RE:TIMEOUT:SP") {
 
     field(VAL, "$(RECONDENSE_PART_TIMEOUT)")
 
-    field(EGU, "seconds")
+    field(EGU, "s")
 
     field(OUT, "$(P)RE:TIMEOUT PP")
 }
